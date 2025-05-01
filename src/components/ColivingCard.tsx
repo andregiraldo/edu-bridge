@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { MapPin, Home, Building, ExternalLink } from 'lucide-react';
 import { HoverCard, HoverCardTrigger, HoverCardContent } from '@/components/ui/hover-card';
 import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 interface ColivingCardProps {
   name: string;
@@ -17,6 +18,15 @@ interface ColivingCardProps {
 }
 
 const ColivingCard = ({ name, details, location, price, image, comingSoon, isCompany, url }: ColivingCardProps) => {
+  const navigate = useNavigate();
+
+  const handleCompanyClick = () => {
+    if (isCompany) {
+      // Redirigir al inicio cuando se hace clic en el logo o nombre del socio
+      navigate('/');
+    }
+  };
+
   return (
     <Card className="group overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full bg-white border-0 rounded-xl hover:-translate-y-2">
       {comingSoon ? (
@@ -27,7 +37,10 @@ const ColivingCard = ({ name, details, location, price, image, comingSoon, isCom
           </div>
         </div>
       ) : isCompany ? (
-        <div className="h-48 flex items-center justify-center p-4 bg-white relative overflow-hidden">
+        <div 
+          className="h-48 flex items-center justify-center p-4 bg-white relative overflow-hidden cursor-pointer" 
+          onClick={handleCompanyClick}
+        >
           <img 
             src={image} 
             alt={name} 
@@ -58,7 +71,12 @@ const ColivingCard = ({ name, details, location, price, image, comingSoon, isCom
       )}
       
       <CardContent className="p-5">
-        <h3 className="text-xl font-bold mb-3 group-hover:text-edubridge-blue transition-colors">{name}</h3>
+        <h3 
+          className={`text-xl font-bold mb-3 group-hover:text-edubridge-blue transition-colors ${isCompany ? 'cursor-pointer' : ''}`}
+          onClick={isCompany ? handleCompanyClick : undefined}
+        >
+          {name}
+        </h3>
         <p className="text-gray-600 text-sm mb-4">{details}</p>
         
         <div className="flex items-center justify-between mt-2">
