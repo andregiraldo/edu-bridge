@@ -1,9 +1,22 @@
 
-import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, Search, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 const HeroSection: React.FC = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      toast.success("¡Búsqueda iniciada con IA!", {
+        description: `Buscando "${searchQuery}" con nuestra inteligencia artificial`
+      });
+    }
+  };
+
   return (
     <section className="relative min-h-screen flex items-center pt-16 overflow-hidden">
       {/* Background Image with Overlay */}
@@ -25,6 +38,28 @@ const HeroSection: React.FC = () => {
           <p className="text-xl md:text-2xl mb-8 text-gray-100 animate-fade-in" style={{animationDelay: '0.2s'}}>
             Universidades, becas, alojamiento y más en un solo lugar.
           </p>
+          
+          {/* AI Search Bar */}
+          <form onSubmit={handleSearch} className="relative mb-8 animate-fade-in" style={{animationDelay: '0.3s'}}>
+            <div className="flex max-w-xl bg-white/10 backdrop-blur-md rounded-full border border-gray-300/30 overflow-hidden p-1">
+              <Input 
+                type="text" 
+                placeholder="¿Qué quieres estudiar? ¿Dónde? Pregúntale a nuestra IA..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="flex-1 bg-transparent border-0 text-white placeholder:text-gray-300 focus:ring-0 rounded-full px-5"
+              />
+              <Button type="submit" className="rounded-full bg-edubridge-blue px-6 flex items-center gap-2">
+                <Search className="w-4 h-4" />
+                <span className="hidden sm:inline">Buscar con IA</span>
+              </Button>
+            </div>
+            <div className="flex items-center mt-2 text-sm text-gray-300">
+              <Zap size={16} className="mr-1" />
+              <span>Potenciado por IA para encontrar tu destino académico perfecto</span>
+            </div>
+          </form>
+
           <div className="animate-fade-in" style={{animationDelay: '0.4s'}}>
             <Button className="btn-primary text-lg group">
               Descubre tus opciones

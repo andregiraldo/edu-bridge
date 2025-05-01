@@ -68,6 +68,11 @@ export default {
 					yellow: '#FDCB5A',
 					bg: '#F6F8FA',
 					text: '#111111',
+          // New AI-inspired colors
+          purple: '#6C5CE7',
+          cyan: '#00CECE',
+          coral: '#FF6B6B',
+          mint: '#00D2A0'
 				}
 			},
 			fontFamily: {
@@ -112,14 +117,33 @@ export default {
 					'50%': {
 						transform: 'translateY(-10px)',
 					},
-				}
+				},
+        // New animation for typing effect
+        'typing': {
+          '0%': { width: '0' },
+          '100%': { width: '100%' }
+        },
+        'blink': {
+          '50%': { borderColor: 'transparent' }
+        },
+        'pulse-glow': {
+          '0%, 100%': { opacity: '1' },
+          '50%': { opacity: '0.6' }
+        }
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.5s ease-out',
 				'float': 'float 6s ease-in-out infinite',
-			}
+        'typing': 'typing 3.5s steps(40) 1s forwards, blink .75s step-end infinite',
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite'
+			},
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+        'hero-pattern': "url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%239C92AC\" fill-opacity=\"0.05\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')"
+      }
 		}
 	},
 	plugins: [require("tailwindcss-animate")],
