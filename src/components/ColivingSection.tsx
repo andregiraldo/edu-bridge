@@ -1,8 +1,11 @@
+
 import React from 'react';
 import ColivingCard from '@/components/ColivingCard';
 import { Button } from '@/components/ui/button';
-import { Home, MapPin } from 'lucide-react';
+import { Home, MapPin, Building } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
+
+// Original coliving data kept for reference
 const colivingData = [{
   id: 1,
   name: 'Bonnevoie 111',
@@ -60,6 +63,44 @@ const colivingData = [{
   image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688',
   comingSoon: false
 }];
+
+// New coliving company data
+const colivingCompanies = [
+  {
+    id: 1,
+    name: 'Coliving.com',
+    details: 'Global coliving platform',
+    location: 'International',
+    price: 'Variable',
+    image: '/lovable-uploads/91068668-c2dd-481c-9664-3e9daee00199.png',
+    comingSoon: false,
+    isCompany: true,
+    url: 'https://coliving.com'
+  },
+  {
+    id: 2,
+    name: 'The House of Co',
+    details: 'Premium coliving spaces',
+    location: 'Multiple locations',
+    price: 'Variable',
+    image: '/lovable-uploads/a8c9ec06-d22e-456f-930c-52482063c06e.png',
+    comingSoon: false,
+    isCompany: true,
+    url: 'https://thehouseofco.com'
+  },
+  {
+    id: 3,
+    name: 'Spotahome',
+    details: 'Online rental platform',
+    location: 'Global coverage',
+    price: 'Variable',
+    image: '/lovable-uploads/bf160780-45c9-490f-8963-ff3701b53d34.png',
+    comingSoon: false,
+    isCompany: true,
+    url: 'https://www.spotahome.com'
+  }
+];
+
 const ColivingSection = () => {
   return <section className="py-16 md:py-24 bg-gradient-to-br from-white via-gray-50 to-gray-100" id="coliving">
       <div className="container mx-auto px-4">
@@ -73,17 +114,46 @@ const ColivingSection = () => {
           </p>
         </div>
         
+        {/* Company Partners Section */}
+        <div className="mb-12">
+          <h3 className="text-2xl font-bold text-center mb-6">Nuestros socios</h3>
+          <div className="relative px-4 md:px-12">
+            <Carousel opts={{
+              align: "start",
+              loop: true
+            }} className="w-full">
+              <CarouselContent className="py-4">
+                {colivingCompanies.map(company => (
+                  <CarouselItem key={company.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/3 pl-4 md:pl-6">
+                    <div className="h-full">
+                      <ColivingCard {...company} />
+                    </div>
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <div className="hidden md:block">
+                <CarouselPrevious className="left-0" />
+                <CarouselNext className="right-0" />
+              </div>
+            </Carousel>
+          </div>
+        </div>
+        
+        {/* Original Coliving Options */}
         <div className="relative px-4 md:px-12">
+          <h3 className="text-2xl font-bold text-center mb-6">Opciones disponibles</h3>
           <Carousel opts={{
-          align: "start",
-          loop: true
-        }} className="w-full">
+            align: "start",
+            loop: true
+          }} className="w-full">
             <CarouselContent className="py-4">
-              {colivingData.map(item => <CarouselItem key={item.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4 md:pl-6">
+              {colivingData.map(item => (
+                <CarouselItem key={item.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4 md:pl-6">
                   <div className="h-full">
                     <ColivingCard {...item} />
                   </div>
-                </CarouselItem>)}
+                </CarouselItem>
+              ))}
             </CarouselContent>
             <div className="hidden md:block">
               <CarouselPrevious className="left-0" />
@@ -100,4 +170,5 @@ const ColivingSection = () => {
       </div>
     </section>;
 };
+
 export default ColivingSection;
