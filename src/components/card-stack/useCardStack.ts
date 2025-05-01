@@ -3,24 +3,10 @@ import { useState, useRef, useEffect } from 'react';
 
 export const useCardStack = (sectionRef: React.RefObject<HTMLDivElement>) => {
   const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [isIntersecting, setIsIntersecting] = useState(false);
   const ticking = useRef(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
-    // Detect when the section is in the viewport
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        setIsIntersecting(entry.isIntersecting);
-      },
-      { threshold: 0.1 } // Start observing when 10% of the element is visible
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-    
     // Optimized scroll handler using requestAnimationFrame
     const handleScroll = () => {
       if (!ticking.current) {
@@ -60,21 +46,10 @@ export const useCardStack = (sectionRef: React.RefObject<HTMLDivElement>) => {
     
     return () => {
       window.removeEventListener('scroll', handleScroll);
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
     };
   }, [sectionRef]);
 
-  // Card visibility based on active index
-  const isFirstCardVisible = isIntersecting;
-  const isSecondCardVisible = activeCardIndex >= 1;
-  const isThirdCardVisible = activeCardIndex >= 2;
-
   return {
-    activeCardIndex,
-    isFirstCardVisible,
-    isSecondCardVisible,
-    isThirdCardVisible
+    activeCardIndex
   };
 };

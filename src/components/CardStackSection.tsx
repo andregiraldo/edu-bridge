@@ -7,34 +7,31 @@ import { cards } from "./card-stack/cardData";
 const CardStackSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const { 
-    activeCardIndex, 
-    isFirstCardVisible, 
-    isSecondCardVisible, 
-    isThirdCardVisible 
+    activeCardIndex
   } = useCardStack(sectionRef);
 
   // Card position and scaling configurations
   const cardConfigs = [
     {
-      isVisible: isFirstCardVisible,
+      isVisible: activeCardIndex === 0,
       isActive: activeCardIndex === 0,
       zIndex: 10,
-      scaleValue: 0.9,
-      translateY: isFirstCardVisible ? '90px' : '200px',
+      scaleValue: 1,
+      translateY: '0px',
     },
     {
-      isVisible: isSecondCardVisible,
+      isVisible: activeCardIndex === 1,
       isActive: activeCardIndex === 1,
       zIndex: 20,
-      scaleValue: 0.95,
-      translateY: isSecondCardVisible ? (activeCardIndex === 1 ? '55px' : '45px') : '200px',
+      scaleValue: 1,
+      translateY: '0px',
     },
     {
-      isVisible: isThirdCardVisible,
+      isVisible: activeCardIndex === 2,
       isActive: activeCardIndex === 2,
       zIndex: 30,
       scaleValue: 1,
-      translateY: isThirdCardVisible ? (activeCardIndex === 2 ? '15px' : '0') : '200px',
+      translateY: '0px',
     }
   ];
 

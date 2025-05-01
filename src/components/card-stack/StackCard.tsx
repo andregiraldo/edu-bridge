@@ -14,8 +14,8 @@ const StackCard: React.FC<CardProps> = ({
   chipColorClass,
   buttonText,
 }) => {
-  // Card style from original component
-  const cardStyle = {
+  // Card style from original component with correct TypeScript types
+  const cardStyle: React.CSSProperties = {
     height: '60vh',
     maxHeight: '600px',
     borderRadius: '20px',
@@ -23,7 +23,7 @@ const StackCard: React.FC<CardProps> = ({
     willChange: 'transform, opacity',
     zIndex,
     transform: `translateY(${translateY}) scale(${scaleValue})`,
-    opacity: isVisible ? (zIndex === 10 ? 0.9 : 1) : 0,
+    opacity: isVisible ? 1 : 0,
     pointerEvents: isVisible ? 'auto' : 'none'
   };
 
