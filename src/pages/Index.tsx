@@ -36,7 +36,7 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-edubridge-bg">
+    <div className="min-h-screen bg-white">
       <Navbar />
       <HeroSection />
       <HowItWorksSection />
@@ -50,3 +50,4 @@ const Index = () => {
 };
 
 export default Index;
+

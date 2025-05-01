@@ -68,7 +68,7 @@ export default {
 					yellow: '#FDCB5A',
 					bg: '#F6F8FA',
 					text: '#111111',
-          // New AI-inspired colors
+          // AI-inspired colors
           purple: '#6C5CE7',
           cyan: '#00CECE',
           coral: '#FF6B6B',
@@ -76,7 +76,8 @@ export default {
 				}
 			},
 			fontFamily: {
-				montserrat: ['Montserrat', 'sans-serif']
+				montserrat: ['Montserrat', 'sans-serif'],
+        poppins: ['Poppins', 'sans-serif']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -118,7 +119,7 @@ export default {
 						transform: 'translateY(-10px)',
 					},
 				},
-        // New animation for typing effect
+        // Animation for typing effect
         'typing': {
           '0%': { width: '0' },
           '100%': { width: '100%' }

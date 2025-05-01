@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -93,7 +93,7 @@
   }
 
   body {
-    @apply bg-edubridge-bg text-edubridge-text font-montserrat;
+    @apply bg-white text-gray-900 font-poppins;
   }
 }
 
@@ -107,7 +107,7 @@
   }
   
   .section-title {
-    @apply text-3xl md:text-4xl font-bold mb-4 text-edubridge-text;
+    @apply text-3xl md:text-4xl font-bold mb-4 text-gray-900;
   }
   
   .section-subtitle {
@@ -118,3 +118,4 @@
     @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
   }
 }
+
