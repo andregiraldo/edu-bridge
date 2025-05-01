@@ -1,3 +1,4 @@
+
 import React, { useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import HeroSection from '@/components/HeroSection';
@@ -9,6 +10,7 @@ import TestimonialsSection from '@/components/TestimonialsSection';
 import CtaSection from '@/components/CtaSection';
 import Footer from '@/components/Footer';
 import ColivingSection from '@/components/ColivingSection';
+import BecasCarousel from '@/components/BecasCarousel';
 
 const Index = () => {
   useEffect(() => {
@@ -44,6 +46,7 @@ const Index = () => {
       <ModulesSection />
       <UniversityMarketplaceSection />
       <ColivingSection />
+      <BecasCarousel />
       <AdSection />
       <TestimonialsSection />
       <CtaSection />
