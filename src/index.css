@@ -117,37 +117,5 @@
   .card-hover {
     @apply transition-all duration-300 hover:scale-[1.02] hover:shadow-lg;
   }
-
-  /* Hexagon styling for How It Works section */
-  .hexagon-container {
-    position: relative;
-    width: 100%;
-    max-width: 280px;
-    margin: 0 auto;
-  }
-
-  .hexagon {
-    position: relative;
-    width: 100%;
-    padding-bottom: 120%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-    transition: all 0.3s ease;
-  }
-
-  .hexagon > div {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  }
 }
+
