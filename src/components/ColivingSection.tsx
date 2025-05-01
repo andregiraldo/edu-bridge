@@ -2,6 +2,7 @@
 import React from 'react';
 import ColivingCard from '@/components/ColivingCard';
 import { Button } from '@/components/ui/button';
+import { Home, MapPin } from 'lucide-react';
 import { 
   Carousel, 
   CarouselContent, 
@@ -78,10 +79,13 @@ const colivingData = [
 
 const ColivingSection = () => {
   return (
-    <section className="py-16 bg-white" id="coliving">
+    <section className="py-16 md:py-24 bg-gradient-to-br from-white via-gray-50 to-gray-100" id="coliving">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 text-gray-900">
+          <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-edubridge-blue/10 to-edubridge-purple/10 text-edubridge-blue text-sm font-medium mb-4">
+            <Home size={16} className="mr-2" /> Espacios para vivir
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
             A house with the right people becomes a home
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
@@ -114,7 +118,7 @@ const ColivingSection = () => {
         </div>
 
         <div className="flex justify-center mt-12">
-          <Button className="bg-edubridge-yellow hover:bg-edubridge-yellow/90 text-black px-8 py-6 rounded-full text-lg font-semibold">
+          <Button className="bg-edubridge-blue hover:bg-edubridge-blue/90 text-white px-8 py-6 rounded-full text-lg font-semibold">
             Apply today
           </Button>
         </div>
