@@ -2,6 +2,13 @@
 import React from 'react';
 import ColivingCard from '@/components/ColivingCard';
 import { Button } from '@/components/ui/button';
+import { 
+  Carousel, 
+  CarouselContent, 
+  CarouselItem, 
+  CarouselNext, 
+  CarouselPrevious 
+} from '@/components/ui/carousel';
 
 const colivingData = [
   {
@@ -39,6 +46,33 @@ const colivingData = [
     price: '€1550',
     image: '',
     comingSoon: true
+  },
+  {
+    id: 5,
+    name: 'Limpertsberg 38',
+    details: '8 bedrooms',
+    location: 'Limpertsberg',
+    price: '€1600',
+    image: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2',
+    comingSoon: false
+  },
+  {
+    id: 6,
+    name: 'Gasperich 27',
+    details: '10 bedrooms',
+    location: 'Gasperich',
+    price: '€1480',
+    image: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267',
+    comingSoon: false
+  },
+  {
+    id: 7,
+    name: 'Clausen 55',
+    details: '6 units',
+    location: 'Clausen',
+    price: '€1575',
+    image: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688',
+    comingSoon: false
   }
 ];
 
@@ -55,10 +89,28 @@ const ColivingSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {colivingData.map((item) => (
-            <ColivingCard key={item.id} {...item} />
-          ))}
+        <div className="relative px-4 md:px-12">
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
+            }}
+            className="w-full"
+          >
+            <CarouselContent className="py-4">
+              {colivingData.map((item) => (
+                <CarouselItem key={item.id} className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 pl-4 md:pl-6">
+                  <div className="h-full">
+                    <ColivingCard {...item} />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="hidden md:block">
+              <CarouselPrevious className="left-0" />
+              <CarouselNext className="right-0" />
+            </div>
+          </Carousel>
         </div>
 
         <div className="flex justify-center mt-12">
