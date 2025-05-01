@@ -1,8 +1,12 @@
+
 import React from 'react';
 import { GraduationCap, Calculator, Bell, House } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
+import { Link } from 'react-router-dom';
+
 const stepGradients = ['from-edubridge-blue to-edubridge-purple', 'from-edubridge-purple to-edubridge-cyan', 'from-edubridge-cyan to-edubridge-coral', 'from-edubridge-coral to-edubridge-blue'];
+
 const steps = [{
   icon: GraduationCap,
   title: "Encuentra tu programa ideal",
@@ -28,6 +32,7 @@ const steps = [{
   action: "Ver opciones",
   url: "#"
 }];
+
 const HowItWorksSection: React.FC = () => {
   return <section id="como-funciona" className="py-16 md:py-24 bg-white overflow-hidden">
       <div className="container mx-auto px-4">
@@ -93,7 +98,7 @@ const HowItWorksSection: React.FC = () => {
                   scale: 0.95
                 }}>
                       <Button className={`bg-gradient-to-r ${stepGradients[index % stepGradients.length]} text-white hover:opacity-90 w-full`} asChild>
-                        
+                        <Link to={step.url}>{step.action}</Link>
                       </Button>
                     </motion.div>
                   </div>
@@ -122,4 +127,5 @@ const HowItWorksSection: React.FC = () => {
       </div>
     </section>;
 };
+
 export default HowItWorksSection;

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { GraduationCap, Calculator, Bell, House, FileText, Zap, LayoutDashboard, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -58,6 +59,7 @@ const modules = [{
   iconColor: "text-edubridge-mint",
   bgPattern: "bg-[radial-gradient(circle_at_top_right,rgba(0,210,160,0.15),transparent_70%)]"
 }];
+
 const ModulesSection: React.FC = () => {
   return <section id="modulos" className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50">
       <div className="container mx-auto px-4">
@@ -71,7 +73,7 @@ const ModulesSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden max-w-7xl mx-auto">
           <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <LayoutDashboard size={20} className="text-edubridge-blue" />
@@ -93,22 +95,28 @@ const ModulesSection: React.FC = () => {
             </div>
             
             <TabsContent value="all" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {modules.map((module, index) => <Card key={index} className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern}`}>
-                    <CardContent className="p-0">
-                      <Collapsible>
-                        <div className="p-10 rounded-md">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {modules.map((module, index) => (
+                  <Card 
+                    key={index} 
+                    className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern} h-full`}
+                  >
+                    <CardContent className="p-0 h-full">
+                      <Collapsible className="h-full">
+                        <div className="p-6">
                           <div className="flex items-center justify-between mb-4">
-                            <div className={`w-10 h-10 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center`}>
-                              <module.icon size={20} />
+                            <div className={`w-12 h-12 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center shadow-sm`}>
+                              <module.icon size={24} />
                             </div>
-                            {module.aiPowered && <span className="flex items-center text-xs font-medium text-edubridge-purple bg-edubridge-purple/10 px-2 py-1 rounded-full">
+                            {module.aiPowered && (
+                              <span className="flex items-center text-xs font-medium text-edubridge-purple bg-edubridge-purple/10 px-2 py-1 rounded-full">
                                 <Zap size={12} className="mr-1 animate-pulse-glow" />
                                 Con IA
-                              </span>}
+                              </span>
+                            )}
                           </div>
                           
-                          <h3 className="text-lg font-bold mb-2">{module.title}</h3>
+                          <h3 className="text-xl font-bold mb-2">{module.title}</h3>
                           
                           <CollapsibleTrigger asChild>
                             <Button variant="ghost" size="sm" className="px-0 text-gray-500 hover:text-edubridge-blue">
@@ -119,7 +127,7 @@ const ModulesSection: React.FC = () => {
                         
                         <CollapsibleContent>
                           <div className="px-6 pb-6 pt-0">
-                            <p className="text-gray-600 mb-4">{module.description}</p>
+                            <p className="text-gray-600 mb-4 text-sm">{module.description}</p>
                             <Link to={module.url}>
                               <Button className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90`}>
                                 {module.actionText}
@@ -129,85 +137,96 @@ const ModulesSection: React.FC = () => {
                         </CollapsibleContent>
                       </Collapsible>
                     </CardContent>
-                  </Card>)}
+                  </Card>
+                ))}
               </div>
             </TabsContent>
             
             <TabsContent value="ai" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {modules.filter(module => module.aiPowered).map((module, index) => <Card key={index} className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern}`}>
-                      <CardContent className="p-0">
-                        <Collapsible>
-                          <div className="p-6">
-                            <div className="flex items-center justify-between mb-4">
-                              <div className={`w-10 h-10 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center`}>
-                                <module.icon size={20} />
-                              </div>
-                              <span className="flex items-center text-xs font-medium text-edubridge-purple bg-edubridge-purple/10 px-2 py-1 rounded-full">
-                                <Zap size={12} className="mr-1 animate-pulse-glow" />
-                                Con IA
-                              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {modules.filter(module => module.aiPowered).map((module, index) => (
+                  <Card 
+                    key={index} 
+                    className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern} h-full`}
+                  >
+                    <CardContent className="p-0 h-full">
+                      <Collapsible className="h-full">
+                        <div className="p-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className={`w-12 h-12 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center shadow-sm`}>
+                              <module.icon size={24} />
                             </div>
-                            
-                            <h3 className="text-lg font-bold mb-2">{module.title}</h3>
-                            
-                            <CollapsibleTrigger asChild>
-                              <Button variant="ghost" size="sm" className="px-0 text-gray-500 hover:text-edubridge-blue">
-                                Ver detalles
-                              </Button>
-                            </CollapsibleTrigger>
+                            <span className="flex items-center text-xs font-medium text-edubridge-purple bg-edubridge-purple/10 px-2 py-1 rounded-full">
+                              <Zap size={12} className="mr-1 animate-pulse-glow" />
+                              Con IA
+                            </span>
                           </div>
                           
-                          <CollapsibleContent>
-                            <div className="px-6 pb-6 pt-0">
-                              <p className="text-gray-600 mb-4">{module.description}</p>
-                              <Link to={module.url}>
-                                <Button className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90`}>
-                                  {module.actionText}
-                                </Button>
-                              </Link>
-                            </div>
-                          </CollapsibleContent>
-                        </Collapsible>
-                      </CardContent>
-                    </Card>)}
+                          <h3 className="text-xl font-bold mb-2">{module.title}</h3>
+                          
+                          <CollapsibleTrigger asChild>
+                            <Button variant="ghost" size="sm" className="px-0 text-gray-500 hover:text-edubridge-blue">
+                              Ver detalles
+                            </Button>
+                          </CollapsibleTrigger>
+                        </div>
+                        
+                        <CollapsibleContent>
+                          <div className="px-6 pb-6 pt-0">
+                            <p className="text-gray-600 mb-4 text-sm">{module.description}</p>
+                            <Link to={module.url}>
+                              <Button className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90`}>
+                                {module.actionText}
+                              </Button>
+                            </Link>
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </TabsContent>
             
             <TabsContent value="tools" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {modules.filter(module => !module.aiPowered).map((module, index) => <Card key={index} className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern}`}>
-                      <CardContent className="p-0">
-                        <Collapsible>
-                          <div className="p-6">
-                            <div className="flex items-center justify-between mb-4">
-                              <div className={`w-10 h-10 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center`}>
-                                <module.icon size={20} />
-                              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {modules.filter(module => !module.aiPowered).map((module, index) => (
+                  <Card 
+                    key={index} 
+                    className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern} h-full`}
+                  >
+                    <CardContent className="p-0 h-full">
+                      <Collapsible className="h-full">
+                        <div className="p-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className={`w-12 h-12 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center shadow-sm`}>
+                              <module.icon size={24} />
                             </div>
-                            
-                            <h3 className="text-lg font-bold mb-2">{module.title}</h3>
-                            
-                            <CollapsibleTrigger asChild>
-                              <Button variant="ghost" size="sm" className="px-0 text-gray-500 hover:text-edubridge-blue">
-                                Ver detalles
-                              </Button>
-                            </CollapsibleTrigger>
                           </div>
                           
-                          <CollapsibleContent>
-                            <div className="px-6 pb-6 pt-0">
-                              <p className="text-gray-600 mb-4">{module.description}</p>
-                              <Link to={module.url}>
-                                <Button className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90`}>
-                                  {module.actionText}
-                                </Button>
-                              </Link>
-                            </div>
-                          </CollapsibleContent>
-                        </Collapsible>
-                      </CardContent>
-                    </Card>)}
+                          <h3 className="text-xl font-bold mb-2">{module.title}</h3>
+                          
+                          <CollapsibleTrigger asChild>
+                            <Button variant="ghost" size="sm" className="px-0 text-gray-500 hover:text-edubridge-blue">
+                              Ver detalles
+                            </Button>
+                          </CollapsibleTrigger>
+                        </div>
+                        
+                        <CollapsibleContent>
+                          <div className="px-6 pb-6 pt-0">
+                            <p className="text-gray-600 mb-4 text-sm">{module.description}</p>
+                            <Link to={module.url}>
+                              <Button className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90`}>
+                                {module.actionText}
+                              </Button>
+                            </Link>
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
             </TabsContent>
           </Tabs>
@@ -215,4 +234,5 @@ const ModulesSection: React.FC = () => {
       </div>
     </section>;
 };
+
 export default ModulesSection;
