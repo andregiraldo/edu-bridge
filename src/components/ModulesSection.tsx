@@ -97,7 +97,7 @@ const ModulesSection: React.FC = () => {
                 {modules.map((module, index) => <Card key={index} className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern}`}>
                     <CardContent className="p-0">
                       <Collapsible>
-                        <div className="p-15 rounded-md">
+                        <div className="p-10 rounded-md">
                           <div className="flex items-center justify-between mb-4">
                             <div className={`w-10 h-10 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center`}>
                               <module.icon size={20} />
