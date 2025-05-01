@@ -11,21 +11,47 @@ import Footer from '@/components/Footer';
 import CardStackSection from '@/components/CardStackSection';
 
 const Index = () => {
+  // Initialize intersection observer to detect when elements enter viewport
   useEffect(() => {
-    // Smooth scroll functionality for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-      anchor.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href');
-        if (targetId && targetId !== '#') {
-          const targetElement = document.querySelector(targetId);
-          if (targetElement) {
-            window.scrollTo({
-              top: targetElement.offsetTop - 80, // Adjust for navbar height
-              behavior: 'smooth'
-            });
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animate-fade-in");
+            observer.unobserve(entry.target);
           }
-        }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    
+    const elements = document.querySelectorAll(".animate-on-scroll");
+    elements.forEach((el) => observer.observe(el));
+    
+    return () => {
+      elements.forEach((el) => observer.unobserve(el));
+    };
+  }, []);
+
+  useEffect(() => {
+    // This helps ensure smooth scrolling for the anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const targetId = this.getAttribute('href')?.substring(1);
+        if (!targetId) return;
+        
+        const targetElement = document.getElementById(targetId);
+        if (!targetElement) return;
+        
+        // Increased offset to account for mobile nav
+        const offset = window.innerWidth < 768 ? 100 : 80;
+        
+        window.scrollTo({
+          top: targetElement.offsetTop - offset,
+          behavior: 'smooth'
+        });
       });
     });
     
@@ -39,13 +65,15 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white">
       <Navbar />
-      <HeroSection />
-      <HowItWorksSection />
-      <ModulesSection />
-      <CardStackSection />
-      <AdSection />
-      <TestimonialsSection />
-      <CtaSection />
+      <main className="space-y-4 sm:space-y-8"> {/* Reduced space on mobile */}
+        <HeroSection />
+        <HowItWorksSection />
+        <ModulesSection />
+        <CardStackSection />
+        <AdSection />
+        <TestimonialsSection />
+        <CtaSection />
+      </main>
       <Footer />
     </div>
   );
