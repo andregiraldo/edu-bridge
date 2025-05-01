@@ -77,10 +77,7 @@ export default {
 			},
 			fontFamily: {
 				montserrat: ['Montserrat', 'sans-serif'],
-        poppins: ['Poppins', 'sans-serif'],
-        display: ['Playfair Display', 'serif'], // Added the missing 'display' font
-        sans: ['Inter', 'sans-serif'],
-        brockmann: ['Brockmann', 'sans-serif']
+        poppins: ['Poppins', 'sans-serif']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -133,21 +130,6 @@ export default {
         'pulse-glow': {
           '0%, 100%': { opacity: '1' },
           '50%': { opacity: '0.6' }
-        },
-        // New card enter animation
-        'card-enter': {
-          '0%': { 
-            opacity: '0', 
-            transform: 'translateY(100px) scale(0.8)'
-          },
-          '100%': { 
-            opacity: '1', 
-            transform: 'translateY(0) scale(1)'
-          }
-        },
-        'perspective-rotate': {
-          '0%': { transform: 'perspective(1000px) rotateX(0deg)' },
-          '100%': { transform: 'perspective(1000px) rotateX(10deg)' }
         }
 			},
 			animation: {
@@ -156,9 +138,7 @@ export default {
 				'fade-in': 'fade-in 0.5s ease-out',
 				'float': 'float 6s ease-in-out infinite',
         'typing': 'typing 3.5s steps(40) 1s forwards, blink .75s step-end infinite',
-        'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
-        'card-enter': 'card-enter 0.8s cubic-bezier(0.19, 1, 0.22, 1) forwards',
-        'perspective-rotate': 'perspective-rotate 2s ease-in-out infinite alternate'
+        'pulse-glow': 'pulse-glow 2s ease-in-out infinite'
 			},
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
