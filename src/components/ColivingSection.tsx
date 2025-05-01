@@ -1,11 +1,9 @@
-
 import React from 'react';
 import ColivingCard from '@/components/ColivingCard';
 import { Button } from '@/components/ui/button';
 import { Home, MapPin, Building } from 'lucide-react';
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Card } from '@/components/ui/card';
 
 // Original coliving data kept for reference
 const colivingData = [{
@@ -116,24 +114,13 @@ const ColivingSection = () => {
           </p>
         </div>
         
-        {/* Company Partners Section - Styled like property types */}
-        <div className="mb-16">
-          <h3 className="text-2xl font-bold text-left mb-8">Nuestros socios</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Company Partners Section - Reorganized as a grid */}
+        <div className="mb-12">
+          <h3 className="text-2xl font-bold text-center mb-6">Nuestros socios</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
             {colivingCompanies.map(company => (
-              <div key={company.id} className="flex flex-col">
-                <Card className="overflow-hidden border-0 rounded-lg shadow-md hover:shadow-xl transition-all duration-300 h-full flex-1">
-                  <div className="aspect-[4/3] w-full overflow-hidden bg-white flex items-center justify-center p-6">
-                    <img 
-                      src={company.image} 
-                      alt={company.name} 
-                      className="max-h-full max-w-full object-contain"
-                    />
-                  </div>
-                  <div className="p-4 text-center">
-                    <h4 className="text-xl font-bold">{company.name}</h4>
-                  </div>
-                </Card>
+              <div key={company.id} className="h-full">
+                <ColivingCard {...company} />
               </div>
             ))}
           </div>
@@ -141,7 +128,7 @@ const ColivingSection = () => {
         
         {/* Original Coliving Options */}
         <div className="relative px-4 md:px-12">
-          <h3 className="text-2xl font-bold text-left mb-8">Opciones disponibles</h3>
+          <h3 className="text-2xl font-bold text-center mb-6">Opciones disponibles</h3>
           <Carousel opts={{
             align: "start",
             loop: true
