@@ -71,19 +71,19 @@ const HowItWorksSection: React.FC = () => {
                   
                   {/* Content */}
                   <div className="p-6 flex flex-col items-center h-full z-10 px-[25px] py-0 rounded mx-0 my-0">
-                    <motion.div className={`w-16 h-16 mb-4 rounded-full bg-gradient-to-br ${stepGradients[index % stepGradients.length]} p-0.5 flex-shrink-0`} whileHover={{
+                    <motion.div whileHover={{
                   scale: 1.2,
                   rotate: 360,
                   transition: {
                     duration: 0.5
                   }
-                }}>
-                      <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                }} className="">
+                      <div className="w-full h-full rounded-full bg-white flex items-center justify-center mx-0 my-[10px]">
                         <step.icon className="text-edubridge-blue" size={24} />
                       </div>
                     </motion.div>
                     
-                    <span className="text-sm font-medium text-edubridge-purple mb-1">Paso {index + 1}</span>
+                    <span className="text-sm font-medium text-edubridge-purple mb-1 my-[18px] mx-px px-[3px]">Paso {index + 1}</span>
                     <h3 className="text-xl font-bold mb-3 text-center">{step.title}</h3>
                     <p className="text-gray-600 mb-5 text-center text-sm">{step.description}</p>
                     
