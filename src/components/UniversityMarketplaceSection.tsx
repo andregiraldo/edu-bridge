@@ -1,6 +1,6 @@
 
-import React from 'react';
-import { Compass, MapPin, ExternalLink, Search } from 'lucide-react';
+import React, { useState } from 'react';
+import { Compass, MapPin, ExternalLink, Search, GraduationCap, Globe } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import {
@@ -10,6 +10,8 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Card, CardContent } from "@/components/ui/card";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 // Datos de ejemplo para las universidades
 const universidades = [
@@ -63,15 +65,41 @@ const universidades = [
   }
 ];
 
+// Extracting unique countries for filter
+const uniqueCountries = ['Todos', ...new Set(universidades.map(uni => uni.pais))];
+
 const UniversityMarketplaceSection: React.FC = () => {
+  const [selectedCountry, setSelectedCountry] = useState('Todos');
+
+  const filteredUniversities = selectedCountry === 'Todos' 
+    ? universidades 
+    : universidades.filter(uni => uni.pais === selectedCountry);
+
   return (
-    <section className="py-16 md:py-24 bg-gray-50">
+    <section className="py-16 md:py-24 bg-gradient-to-br from-white via-gray-50 to-gray-100">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
-          <h2 className="section-title">Explora universidades de todo el mundo</h2>
-          <p className="section-subtitle">
+          <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-edubridge-blue/10 to-edubridge-purple/10 text-edubridge-blue text-sm font-medium mb-4">
+            <GraduationCap size={16} className="mr-2" /> Instituciones globales
+          </span>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">Explora universidades de todo el mundo</h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Descubre miles de programas académicos en las mejores instituciones a nivel global
           </p>
+        </div>
+
+        {/* Country Filters */}
+        <div className="flex justify-center mb-10">
+          <div className="bg-white p-2 rounded-xl shadow-md">
+            <ToggleGroup type="single" value={selectedCountry} onValueChange={(value) => value && setSelectedCountry(value)}>
+              {uniqueCountries.map(country => (
+                <ToggleGroupItem key={country} value={country} variant="outline" 
+                  className="px-4 py-2 data-[state=on]:bg-edubridge-blue data-[state=on]:text-white">
+                  {country}
+                </ToggleGroupItem>
+              ))}
+            </ToggleGroup>
+          </div>
         </div>
 
         {/* Vista móvil: Carrusel */}
@@ -84,7 +112,7 @@ const UniversityMarketplaceSection: React.FC = () => {
             className="w-full"
           >
             <CarouselContent>
-              {universidades.map((uni) => (
+              {filteredUniversities.map((uni) => (
                 <CarouselItem key={uni.id} className="md:basis-1/2 lg:basis-1/3">
                   <div className="h-full">
                     <UniversityCard universidad={uni} />
@@ -100,15 +128,15 @@ const UniversityMarketplaceSection: React.FC = () => {
         </div>
 
         {/* Vista desktop: Grid */}
-        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-          {universidades.map((uni) => (
+        <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+          {filteredUniversities.map((uni) => (
             <UniversityCard key={uni.id} universidad={uni} />
           ))}
         </div>
 
         <div className="flex justify-center mt-10">
           <Button size="lg" className="bg-edubridge-blue hover:bg-edubridge-blue/90 group transition-all duration-300">
-            <Compass className="mr-2 h-5 w-5 group-hover:animate-pulse" />
+            <Globe className="mr-2 h-5 w-5 group-hover:animate-pulse" />
             Explorar todas las universidades
             <ExternalLink className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
           </Button>
@@ -131,38 +159,40 @@ interface UniversityCardProps {
 
 const UniversityCard: React.FC<UniversityCardProps> = ({ universidad }) => {
   return (
-    <div className="group rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full bg-white">
+    <Card className="group overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 h-full bg-white border-0 rounded-xl hover:-translate-y-2">
       <div className="relative w-full h-48 overflow-hidden">
         <img
           src={universidad.imagen}
           alt={universidad.nombre}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-60"></div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-70"></div>
+        
+        <div className="absolute bottom-0 left-0 p-4 w-full">
+          <span className="bg-edubridge-blue/90 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-1 rounded-full inline-flex items-center">
+            <MapPin size={12} className="mr-1" />
+            {universidad.ciudad}, {universidad.pais}
+          </span>
+        </div>
       </div>
 
-      <div className="p-5">
-        <h3 className="text-xl font-bold mb-2 group-hover:text-edubridge-blue transition-colors">
+      <CardContent className="p-5">
+        <h3 className="text-xl font-bold mb-3 group-hover:text-edubridge-blue transition-colors line-clamp-2">
           {universidad.nombre}
         </h3>
         
-        <div className="flex items-center text-gray-600 mb-3">
-          <MapPin size={16} className="mr-1" />
-          <span>{universidad.ciudad}, {universidad.pais}</span>
-        </div>
-        
         <div className="flex justify-between items-center">
-          <span className="text-sm font-medium bg-gray-100 rounded-full px-3 py-1">
+          <span className="text-sm font-medium bg-gray-100 rounded-full px-3 py-1.5 text-edubridge-purple">
             {universidad.programas} programas
           </span>
           
-          <Button variant="outline" size="sm" className="text-edubridge-blue border-edubridge-blue hover:bg-edubridge-blue hover:text-white group">
+          <Button variant="ghost" size="sm" className="text-edubridge-blue hover:bg-edubridge-blue/10 group">
             <Search size={16} className="mr-1 group-hover:animate-pulse" />
-            Ver más
+            Ver detalles
           </Button>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
