@@ -1,91 +1,41 @@
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
+import StackCard from "./card-stack/StackCard";
+import { useCardStack } from "./card-stack/useCardStack";
+import { cards } from "./card-stack/cardData";
 
 const CardStackSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
-  const [activeCardIndex, setActiveCardIndex] = useState(0);
-  const [isIntersecting, setIsIntersecting] = useState(false);
-  const ticking = useRef(false);
-  const lastScrollY = useRef(0);
+  const { 
+    activeCardIndex, 
+    isFirstCardVisible, 
+    isSecondCardVisible, 
+    isThirdCardVisible 
+  } = useCardStack(sectionRef);
 
-  // Estilos para las tarjetas, similar a HumanoidSection
-  const cardStyle = {
-    height: '60vh',
-    maxHeight: '600px',
-    borderRadius: '20px',
-    transition: 'transform 0.5s cubic-bezier(0.19, 1, 0.22, 1), opacity 0.5s cubic-bezier(0.19, 1, 0.22, 1)',
-    willChange: 'transform, opacity'
-  };
-
-  useEffect(() => {
-    // Detectar cuando la sección está en el viewport
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const [entry] = entries;
-        setIsIntersecting(entry.isIntersecting);
-      },
-      { threshold: 0.1 } // Comienza a observar cuando el 10% del elemento es visible
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+  // Card position and scaling configurations
+  const cardConfigs = [
+    {
+      isVisible: isFirstCardVisible,
+      isActive: activeCardIndex === 0,
+      zIndex: 10,
+      scaleValue: 0.9,
+      translateY: isFirstCardVisible ? '90px' : '200px',
+    },
+    {
+      isVisible: isSecondCardVisible,
+      isActive: activeCardIndex === 1,
+      zIndex: 20,
+      scaleValue: 0.95,
+      translateY: isSecondCardVisible ? (activeCardIndex === 1 ? '55px' : '45px') : '200px',
+    },
+    {
+      isVisible: isThirdCardVisible,
+      isActive: activeCardIndex === 2,
+      zIndex: 30,
+      scaleValue: 1,
+      translateY: isThirdCardVisible ? (activeCardIndex === 2 ? '15px' : '0') : '200px',
     }
-    
-    // Manejador de scroll optimizado usando requestAnimationFrame
-    const handleScroll = () => {
-      if (!ticking.current) {
-        lastScrollY.current = window.scrollY;
-        
-        window.requestAnimationFrame(() => {
-          if (!sectionRef.current) return;
-          
-          const sectionRect = sectionRef.current.getBoundingClientRect();
-          const viewportHeight = window.innerHeight;
-          const totalScrollDistance = viewportHeight * 2;
-          
-          // Calcular el progreso del desplazamiento
-          let progress = 0;
-          if (sectionRect.top <= 0) {
-            progress = Math.min(1, Math.max(0, Math.abs(sectionRect.top) / totalScrollDistance));
-          }
-          
-          // Determinar qué tarjeta debería ser visible según el progreso
-          if (progress >= 0.66) {
-            setActiveCardIndex(2);
-          } else if (progress >= 0.33) {
-            setActiveCardIndex(1);
-          } else {
-            setActiveCardIndex(0);
-          }
-          
-          ticking.current = false;
-        });
-        
-        ticking.current = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // Cálculo inicial
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
-    };
-  }, []);
-
-  // Visibilidad de las tarjetas basada en el índice activo
-  const isFirstCardVisible = isIntersecting;
-  const isSecondCardVisible = activeCardIndex >= 1;
-  const isThirdCardVisible = activeCardIndex >= 2;
-
-  // Define card gradients matching the EduBridge theme colors
-  const cardGradients = [
-    'from-edubridge-blue to-edubridge-purple',
-    'from-edubridge-purple to-edubridge-cyan',
-    'from-edubridge-cyan to-edubridge-coral'
   ];
 
   return (
@@ -115,106 +65,22 @@ const CardStackSection = () => {
           </div>
           
           <div className="relative flex-1 perspective-1000">
-            {/* Primera Tarjeta */}
-            <div 
-              className={`absolute inset-0 overflow-hidden shadow-xl rounded-2xl border border-white/20 ${isFirstCardVisible ? 'animate-card-enter' : ''}`} 
-              style={{
-                ...cardStyle,
-                zIndex: 10,
-                transform: `translateY(${isFirstCardVisible ? '90px' : '200px'}) scale(0.9)`,
-                opacity: isFirstCardVisible ? 0.9 : 0
-              }}
-            >
-              <div
-                className={`absolute inset-0 z-0 bg-gradient-to-br ${cardGradients[0]} opacity-10`}
-              ></div>
-              
-              <div className="absolute top-4 right-4 z-20">
-                <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-edubridge-blue/10 backdrop-blur-sm text-edubridge-blue">
-                  <span className="text-sm font-medium">Comienza tu viaje</span>
-                </div>
-              </div>
-              
-              <div className="relative z-10 p-5 sm:p-6 md:p-8 h-full flex items-center">
-                <div className="max-w-lg">
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-4 text-gray-900">
-                    Busca universidades que se adapten a ti
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-6">
-                    Usa nuestro buscador inteligente para encontrar las mejores opciones según tu perfil, intereses y presupuesto.
-                  </p>
-                  <button className="btn-primary">Explorar opciones</button>
-                </div>
-              </div>
-            </div>
-            
-            {/* Segunda Tarjeta */}
-            <div 
-              className={`absolute inset-0 overflow-hidden shadow-xl rounded-2xl border border-white/20 ${isSecondCardVisible ? 'animate-card-enter' : ''}`} 
-              style={{
-                ...cardStyle,
-                zIndex: 20,
-                transform: `translateY(${isSecondCardVisible ? activeCardIndex === 1 ? '55px' : '45px' : '200px'}) scale(0.95)`,
-                opacity: isSecondCardVisible ? 1 : 0,
-                pointerEvents: isSecondCardVisible ? 'auto' : 'none'
-              }}
-            >
-              <div
-                className={`absolute inset-0 z-0 bg-gradient-to-br ${cardGradients[1]} opacity-10`}
-              ></div>
-              
-              <div className="absolute top-4 right-4 z-20">
-                <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-edubridge-purple/10 backdrop-blur-sm text-edubridge-purple">
-                  <span className="text-sm font-medium">Gestiona tus solicitudes</span>
-                </div>
-              </div>
-              
-              <div className="relative z-10 p-5 sm:p-6 md:p-8 h-full flex items-center">
-                <div className="max-w-lg">
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-4 text-gray-900">
-                    Aplicaciones sencillas y centralizadas
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-6">
-                    Gestiona todas tus solicitudes en un solo lugar y recibe actualizaciones en tiempo real sobre tu proceso de admisión.
-                  </p>
-                  <button className="btn-primary">Centralizar aplicaciones</button>
-                </div>
-              </div>
-            </div>
-            
-            {/* Tercera Tarjeta */}
-            <div 
-              className={`absolute inset-0 overflow-hidden shadow-xl rounded-2xl border border-white/20 ${isThirdCardVisible ? 'animate-card-enter' : ''}`} 
-              style={{
-                ...cardStyle,
-                zIndex: 30,
-                transform: `translateY(${isThirdCardVisible ? activeCardIndex === 2 ? '15px' : '0' : '200px'}) scale(1)`,
-                opacity: isThirdCardVisible ? 1 : 0,
-                pointerEvents: isThirdCardVisible ? 'auto' : 'none'
-              }}
-            >
-              <div
-                className={`absolute inset-0 z-0 bg-gradient-to-br ${cardGradients[2]} opacity-10`}
-              ></div>
-              
-              <div className="absolute top-4 right-4 z-20">
-                <div className="inline-flex items-center justify-center px-4 py-2 rounded-full bg-edubridge-cyan/10 backdrop-blur-sm text-edubridge-cyan">
-                  <span className="text-sm font-medium">Asistencia IA</span>
-                </div>
-              </div>
-              
-              <div className="relative z-10 p-5 sm:p-6 md:p-8 h-full flex items-center">
-                <div className="max-w-lg">
-                  <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight mb-4 text-gray-900">
-                    Recibe ayuda personalizada con <span className="text-edubridge-blue">IA</span>
-                  </h3>
-                  <p className="text-gray-600 text-lg mb-6">
-                    Nuestros asistentes virtuales te ayudan a preparar documentos, practicar entrevistas y resolver dudas en cualquier momento.
-                  </p>
-                  <button className="btn-primary">Probar asistente</button>
-                </div>
-              </div>
-            </div>
+            {cards.map((card, index) => (
+              <StackCard
+                key={index}
+                isVisible={cardConfigs[index].isVisible}
+                isActive={cardConfigs[index].isActive}
+                zIndex={cardConfigs[index].zIndex}
+                scaleValue={cardConfigs[index].scaleValue}
+                translateY={cardConfigs[index].translateY}
+                title={card.title}
+                description={card.description}
+                gradientClass={card.gradient}
+                chipText={card.chipText}
+                chipColorClass={card.chipColorClass}
+                buttonText={card.buttonText}
+              />
+            ))}
           </div>
         </div>
       </section>
