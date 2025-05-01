@@ -1,13 +1,7 @@
 
 import React from 'react';
 import { GraduationCap, Calculator, Bell, House } from 'lucide-react';
-import { 
-  Carousel, 
-  CarouselContent, 
-  CarouselItem, 
-  CarouselNext, 
-  CarouselPrevious 
-} from "@/components/ui/carousel";
+import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 
 const stepGradients = [
@@ -59,69 +53,86 @@ const HowItWorksSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="relative max-w-5xl mx-auto">
-          {/* Progress bar */}
-          <div className="hidden md:block absolute top-32 left-0 right-0 h-1 bg-gray-100">
-            <div className="h-full w-1/4 bg-gradient-to-r from-edubridge-blue to-edubridge-purple"></div>
-          </div>
-          
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-          >
-            <CarouselContent>
-              {steps.map((step, index) => (
-                <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                  <div 
-                    className="rounded-xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden group h-full flex flex-col"
-                  >
-                    {/* Top gradient border */}
-                    <div className={`h-1 w-full bg-gradient-to-r ${stepGradients[index % stepGradients.length]}`}></div>
-                    
-                    <div className="p-6 flex flex-col h-full">
-                      <div className="mb-6 flex items-center">
-                        <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${stepGradients[index % stepGradients.length]} p-0.5 group-hover:scale-110 transition-transform duration-300`}>
-                          <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-                            <step.icon className="text-edubridge-blue" size={24} />
-                          </div>
-                        </div>
-                        
-                        <div className="ml-4">
-                          <span className="text-sm font-medium text-edubridge-purple">Paso {index + 1}</span>
-                          <h3 className="text-xl font-bold">{step.title}</h3>
-                        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
+          {steps.map((step, index) => (
+            <motion.div
+              key={index}
+              className="flex justify-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ 
+                duration: 0.5, 
+                delay: index * 0.1,
+                type: "spring",
+                stiffness: 100
+              }}
+              viewport={{ once: true }}
+            >
+              <div className="hexagon-container">
+                <motion.div 
+                  className={`hexagon bg-white relative shadow-lg group`}
+                  whileHover={{ 
+                    scale: 1.05, 
+                    rotate: 5,
+                    transition: { type: "spring", stiffness: 300 }
+                  }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {/* Top gradient border */}
+                  <div className={`h-1.5 w-full absolute top-0 left-0 bg-gradient-to-r ${stepGradients[index % stepGradients.length]}`} 
+                       style={{ clipPath: "polygon(0 0, 100% 0, 93% 100%, 7% 100%)" }}></div>
+                  
+                  {/* Content */}
+                  <div className="p-6 flex flex-col items-center h-full z-10">
+                    <motion.div 
+                      className={`w-16 h-16 mb-4 rounded-full bg-gradient-to-br ${stepGradients[index % stepGradients.length]} p-0.5 flex-shrink-0`}
+                      whileHover={{ 
+                        scale: 1.2,
+                        rotate: 360,
+                        transition: { duration: 0.5 }
+                      }}
+                    >
+                      <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                        <step.icon className="text-edubridge-blue" size={24} />
                       </div>
-                      
-                      <p className="text-gray-600 mb-6 flex-grow">{step.description}</p>
-                      
+                    </motion.div>
+                    
+                    <span className="text-sm font-medium text-edubridge-purple mb-1">Paso {index + 1}</span>
+                    <h3 className="text-xl font-bold mb-3 text-center">{step.title}</h3>
+                    <p className="text-gray-600 mb-5 text-center text-sm">{step.description}</p>
+                    
+                    <motion.div 
+                      className="mt-auto"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
                       <Button 
-                        className={`bg-gradient-to-r ${stepGradients[index % stepGradients.length]} text-white hover:opacity-90 w-full group-hover:scale-105 transition-transform duration-300`}
+                        className={`bg-gradient-to-r ${stepGradients[index % stepGradients.length]} text-white hover:opacity-90 w-full`}
                         asChild
                       >
                         <a href={step.url}>{step.action}</a>
                       </Button>
-                    </div>
+                    </motion.div>
                   </div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            
-            <div className="absolute -bottom-12 left-0 right-0 flex items-center justify-center gap-2 mt-8">
-              <CarouselPrevious className="static translate-y-0 h-10 w-10" />
-              <div className="flex gap-1">
-                {steps.map((_, index) => (
-                  <div 
-                    key={index}
-                    className={`w-2 h-2 rounded-full bg-gray-300 transition-all duration-300 hover:bg-edubridge-blue`}
-                  />
-                ))}
+                </motion.div>
               </div>
-              <CarouselNext className="static translate-y-0 h-10 w-10" />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Hexagon-shaped connectors for desktop */}
+        <div className="hidden lg:flex justify-center mt-4">
+          {steps.slice(0, -1).map((_, index) => (
+            <div key={`connector-${index}`} className="flex items-center mx-4">
+              <motion.div 
+                className={`h-1 w-24 bg-gradient-to-r ${stepGradients[index % stepGradients.length]}`}
+                initial={{ scaleX: 0, opacity: 0 }}
+                whileInView={{ scaleX: 1, opacity: 1 }}
+                transition={{ delay: 0.5 + index * 0.1, duration: 0.5 }}
+                viewport={{ once: true }}
+              />
             </div>
-          </Carousel>
+          ))}
         </div>
       </div>
     </section>
