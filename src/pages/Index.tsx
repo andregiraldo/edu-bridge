@@ -8,6 +8,7 @@ import AdSection from '@/components/AdSection';
 import TestimonialsSection from '@/components/TestimonialsSection';
 import CtaSection from '@/components/CtaSection';
 import Footer from '@/components/Footer';
+import ColivingSection from '@/components/ColivingSection';
 
 const Index = () => {
   useEffect(() => {
@@ -41,6 +42,7 @@ const Index = () => {
       <HeroSection />
       <HowItWorksSection />
       <ModulesSection />
+      <ColivingSection />
       <AdSection />
       <TestimonialsSection />
       <CtaSection />
@@ -50,4 +52,3 @@ const Index = () => {
 };
 
 export default Index;
-
