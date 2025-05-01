@@ -111,17 +111,19 @@ const ModulesSection: React.FC = () => {
             </div>
             
             <div className="flex items-center justify-between mb-6">
-              <TabsList className="bg-gray-100">
-                <TabsTrigger value="all" className="data-[state=active]:bg-edubridge-blue data-[state=active]:text-white">Todas</TabsTrigger>
-                <TabsTrigger value="ai" className="data-[state=active]:bg-edubridge-purple data-[state=active]:text-white">Con IA</TabsTrigger>
-                <TabsTrigger value="tools" className="data-[state=active]:bg-edubridge-cyan data-[state=active]:text-white">Herramientas</TabsTrigger>
-              </TabsList>
-              
-              <div className="hidden md:flex gap-2">
-                <div className="w-3 h-3 rounded-full bg-edubridge-coral"></div>
-                <div className="w-3 h-3 rounded-full bg-edubridge-yellow"></div>
-                <div className="w-3 h-3 rounded-full bg-edubridge-mint"></div>
-              </div>
+              <Tabs defaultValue="all" className="w-full">
+                <TabsList className="bg-gray-100">
+                  <TabsTrigger value="all" className="data-[state=active]:bg-edubridge-blue data-[state=active]:text-white">Todas</TabsTrigger>
+                  <TabsTrigger value="ai" className="data-[state=active]:bg-edubridge-purple data-[state=active]:text-white">Con IA</TabsTrigger>
+                  <TabsTrigger value="tools" className="data-[state=active]:bg-edubridge-cyan data-[state=active]:text-white">Herramientas</TabsTrigger>
+                </TabsList>
+                
+                <div className="hidden md:flex gap-2">
+                  <div className="w-3 h-3 rounded-full bg-edubridge-coral"></div>
+                  <div className="w-3 h-3 rounded-full bg-edubridge-yellow"></div>
+                  <div className="w-3 h-3 rounded-full bg-edubridge-mint"></div>
+                </div>
+              </Tabs>
             </div>
             
             {/* Dashboard content - placeholder grid */}
@@ -264,7 +266,8 @@ const ModulesSection: React.FC = () => {
       </div>
       
       {/* Add CSS animations */}
-      <style jsx>{`
+      <style>
+        {`
         @keyframes slide-up {
           from {
             opacity: 0;
@@ -318,7 +321,8 @@ const ModulesSection: React.FC = () => {
         .perspective-1000:hover {
           transform: rotateX(0deg) rotateY(0deg);
         }
-      `}</style>
+        `}
+      </style>
     </section>
   );
 };
