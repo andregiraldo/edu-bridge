@@ -1,16 +1,17 @@
-
 import React from 'react';
 import { GraduationCap, Calculator, Bell, House, FileText, Zap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const moduleBorders = [
-  'border-edubridge-purple hover:shadow-edubridge-purple/20',
-  'border-edubridge-cyan hover:shadow-edubridge-cyan/20',
-  'border-edubridge-yellow hover:shadow-edubridge-yellow/20',
-  'border-edubridge-coral hover:shadow-edubridge-coral/20',
-  'border-edubridge-mint hover:shadow-edubridge-mint/20',
+// Define gradient borders for a more vibrant look
+const moduleGradients = [
+  'from-edubridge-purple to-edubridge-blue',
+  'from-edubridge-cyan to-edubridge-blue',
+  'from-edubridge-yellow to-edubridge-coral',
+  'from-edubridge-coral to-edubridge-purple',
+  'from-edubridge-mint to-edubridge-cyan',
 ];
 
+// Keep the icon background colors
 const moduleIcons = [
   'text-edubridge-purple bg-edubridge-purple/10',
   'text-edubridge-cyan bg-edubridge-cyan/10',
@@ -76,26 +77,31 @@ const ModulesSection: React.FC = () => {
             <Link 
               key={index}
               to={module.url}
-              className={`bg-white rounded-xl p-6 border-2 ${moduleBorders[index % moduleBorders.length]} shadow-sm hover:shadow-xl flex flex-col h-full transition-all duration-300 group relative overflow-hidden`}
+              className={`relative bg-white rounded-xl p-6 shadow-sm hover:shadow-xl flex flex-col h-full transition-all duration-300 group overflow-hidden`}
             >
+              {/* Gradient border effect using pseudo-element */}
+              <div className={`absolute inset-0 p-[2px] rounded-xl bg-gradient-to-br ${moduleGradients[index % moduleGradients.length]} -z-10`}>
+                <div className="absolute inset-0 bg-white rounded-[9px]"></div>
+              </div>
+              
               <div className="absolute -right-20 -top-20 w-40 h-40 bg-gray-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               
-              <div className="flex items-start mb-4">
+              <div className="flex items-start mb-4 z-10">
                 <div className={`w-12 h-12 rounded-lg ${moduleIcons[index % moduleIcons.length]} flex items-center justify-center mr-4 transition-all duration-300 group-hover:scale-110`}>
                   <module.icon size={24} />
                 </div>
                 <h3 className="text-lg font-bold">{module.title}</h3>
               </div>
-              <p className="text-gray-600 mt-2">{module.description}</p>
+              <p className="text-gray-600 mt-2 z-10">{module.description}</p>
               
               {module.aiPowered && (
-                <div className="mt-auto pt-4 flex items-center text-sm text-edubridge-purple">
+                <div className="mt-auto pt-4 flex items-center text-sm text-edubridge-purple z-10">
                   <Zap size={14} className="mr-1 animate-pulse-glow" />
                   <span>Con IA</span>
                 </div>
               )}
               
-              <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <div className="absolute bottom-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10">
                 <ArrowRight className="text-gray-400" size={16} />
               </div>
             </Link>
