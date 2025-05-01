@@ -77,7 +77,10 @@ export default {
 			},
 			fontFamily: {
 				montserrat: ['Montserrat', 'sans-serif'],
-        poppins: ['Poppins', 'sans-serif']
+        poppins: ['Poppins', 'sans-serif'],
+        display: ['Playfair Display', 'serif'], // Added the missing 'display' font
+        sans: ['Inter', 'sans-serif'],
+        brockmann: ['Brockmann', 'sans-serif']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
