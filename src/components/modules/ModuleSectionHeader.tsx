@@ -4,7 +4,7 @@ import { LayoutDashboard } from 'lucide-react';
 
 export const ModuleSectionHeader: React.FC = () => {
   return (
-    <div className="text-center mb-12">
+    <div className="text-center mb-8">
       <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-edubridge-purple/10 to-edubridge-blue/10 text-edubridge-purple text-sm font-medium mb-4">
         <LayoutDashboard size={16} className="mr-2" /> Panel personalizado
       </span>

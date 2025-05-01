@@ -11,7 +11,7 @@ import ModuleTabContent from './ModuleTabContent';
 export const ModuleTabs: React.FC = () => {
   return (
     <Tabs defaultValue="all" className="w-full">
-      <TabsList className="bg-gray-100 mx-auto w-fit mb-8 pointer-events-auto">
+      <TabsList className="bg-gray-100 mx-auto w-fit mb-8">
         <TabsTrigger value="all" className="data-[state=active]:bg-edubridge-blue data-[state=active]:text-white">Todas</TabsTrigger>
         <TabsTrigger value="ai" className="data-[state=active]:bg-edubridge-purple data-[state=active]:text-white">Con IA</TabsTrigger>
         <TabsTrigger value="tools" className="data-[state=active]:bg-edubridge-cyan data-[state=active]:text-white">Herramientas</TabsTrigger>
