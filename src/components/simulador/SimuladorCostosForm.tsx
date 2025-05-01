@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calculator, GraduationCap, House, Money } from 'lucide-react';
+import { Calculator, GraduationCap, House, DollarSign } from 'lucide-react';
 import CostoEducacionForm from './CostoEducacionForm';
 import CostoViviendaForm from './CostoViviendaForm';
 import CostoVidaForm from './CostoVidaForm';
@@ -86,7 +86,7 @@ const SimuladorCostosForm = () => {
                   value="vida" 
                   className="data-[state=active]:bg-edubridge-cyan data-[state=active]:text-white"
                 >
-                  <Money className="mr-2 h-4 w-4" />
+                  <DollarSign className="mr-2 h-4 w-4" />
                   Coste de vida
                 </TabsTrigger>
               </TabsList>

@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
-import { GraduationCap, House, Money, RefreshCcw } from 'lucide-react';
+import { GraduationCap, House, DollarSign, RefreshCcw } from 'lucide-react';
 
 interface ResultadosSimuladorProps {
   costos: {
@@ -68,7 +68,7 @@ const ResultadosSimulador = ({ costos, onResetear }: ResultadosSimuladorProps) =
         <div className="p-4 border rounded-lg">
           <div className="flex items-center mb-3">
             <div className="w-10 h-10 bg-edubridge-cyan/20 rounded-full flex items-center justify-center mr-3">
-              <Money className="text-edubridge-cyan" size={20} />
+              <DollarSign className="text-edubridge-cyan" size={20} />
             </div>
             <div>
               <h3 className="font-medium">Coste de vida</h3>

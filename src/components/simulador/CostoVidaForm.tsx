@@ -1,9 +1,8 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Calculator } from 'lucide-react';
+import { ArrowLeft, Calculator, DollarSign } from 'lucide-react';
 
 interface CostoVidaFormProps {
   onUpdateCosto: (value: number) => void;
