@@ -19,11 +19,6 @@ import {
   TabsList, 
   TabsTrigger 
 } from "@/components/ui/tabs";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 
 // Define module data with additional properties for the dashboard view
 const modules = [
@@ -86,7 +81,7 @@ const modules = [
 
 const ModulesSection: React.FC = () => {
   return (
-    <section id="modulos" className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50">
+    <section id="modulos" className="py-16 md:py-24 bg-gradient-to-b from-white to-gray-50 overflow-hidden">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <span className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-edubridge-purple/10 to-edubridge-blue/10 text-edubridge-purple text-sm font-medium mb-4">
@@ -98,160 +93,232 @@ const ModulesSection: React.FC = () => {
           </p>
         </div>
 
-        <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
-          <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <LayoutDashboard size={20} className="text-edubridge-blue" />
-              <span className="font-medium text-gray-700">Dashboard de herramientas</span>
-            </div>
-            <Button variant="ghost" size="sm" className="gap-1">
-              <Settings size={16} />
-              <span className="hidden sm:inline">Personalizar</span>
-            </Button>
-          </div>
-          
-          <Tabs defaultValue="all" className="w-full p-4">
-            <div className="flex items-center justify-between mb-4">
-              <TabsList className="bg-gray-100">
-                <TabsTrigger value="all">Todas</TabsTrigger>
-                <TabsTrigger value="ai">Con IA</TabsTrigger>
-                <TabsTrigger value="tools">Herramientas</TabsTrigger>
-              </TabsList>
+        {/* Dashboard Panel */}
+        <div className="relative mb-20 mx-auto">
+          {/* Dashboard background */}
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 max-w-4xl mx-auto transform perspective-1000">
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-3">
+                <div className="bg-edubridge-blue/10 p-3 rounded-lg">
+                  <LayoutDashboard size={24} className="text-edubridge-blue" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-800">Dashboard de herramientas</h3>
+              </div>
+              <Button variant="outline" size="sm" className="gap-2">
+                <Settings size={18} />
+                <span>Personalizar</span>
+              </Button>
             </div>
             
-            <TabsContent value="all" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {modules.map((module, index) => (
-                  <Card key={index} className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern}`}>
-                    <CardContent className="p-0">
-                      <Collapsible>
-                        <div className="p-6">
+            <div className="flex items-center justify-between mb-6">
+              <TabsList className="bg-gray-100">
+                <TabsTrigger value="all" className="data-[state=active]:bg-edubridge-blue data-[state=active]:text-white">Todas</TabsTrigger>
+                <TabsTrigger value="ai" className="data-[state=active]:bg-edubridge-purple data-[state=active]:text-white">Con IA</TabsTrigger>
+                <TabsTrigger value="tools" className="data-[state=active]:bg-edubridge-cyan data-[state=active]:text-white">Herramientas</TabsTrigger>
+              </TabsList>
+              
+              <div className="hidden md:flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-edubridge-coral"></div>
+                <div className="w-3 h-3 rounded-full bg-edubridge-yellow"></div>
+                <div className="w-3 h-3 rounded-full bg-edubridge-mint"></div>
+              </div>
+            </div>
+            
+            {/* Dashboard content - placeholder grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-4 opacity-15">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="h-16 rounded-lg bg-gray-100 animate-pulse"></div>
+              ))}
+            </div>
+          </div>
+          
+          {/* Widget Cards positioned outside the dashboard */}
+          <div className="absolute inset-x-0 -bottom-96 md:-bottom-64 pointer-events-none">
+            <div className="max-w-6xl mx-auto">
+              <Tabs defaultValue="all" className="w-full">
+                <TabsContent value="all" className="mt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                    {modules.map((module, index) => (
+                      <Card 
+                        key={index} 
+                        className={`border-0 shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl pointer-events-auto transform translate-y-0 hover:-translate-y-2 ${module.bgPattern} opacity-0 animate-slide-up`}
+                        style={{ 
+                          animationDelay: `${index * 150}ms`, 
+                          animationFillMode: 'forwards' 
+                        }}
+                      >
+                        <CardContent className="p-6">
                           <div className="flex items-center justify-between mb-4">
-                            <div className={`w-10 h-10 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center`}>
-                              <module.icon size={20} />
+                            <div className={`w-14 h-14 rounded-xl ${module.iconColor} bg-gray-50 flex items-center justify-center shadow-md`}>
+                              <module.icon size={28} className="animate-float" />
                             </div>
                             {module.aiPowered && (
-                              <span className="flex items-center text-xs font-medium text-edubridge-purple bg-edubridge-purple/10 px-2 py-1 rounded-full">
-                                <Zap size={12} className="mr-1 animate-pulse-glow" />
+                              <span className="flex items-center text-sm font-medium text-edubridge-purple bg-edubridge-purple/10 px-3 py-1 rounded-full">
+                                <Zap size={14} className="mr-1 animate-pulse-glow" />
                                 Con IA
                               </span>
                             )}
                           </div>
                           
-                          <h3 className="text-lg font-bold mb-2">{module.title}</h3>
+                          <h3 className="text-xl font-bold mb-2 transition-colors duration-300">{module.title}</h3>
+                          <p className="text-gray-600 mb-6 text-sm">{module.description}</p>
                           
-                          <CollapsibleTrigger asChild>
-                            <Button variant="ghost" size="sm" className="px-0 text-gray-500 hover:text-edubridge-blue">
-                              Ver detalles
+                          <Link to={module.url} className="block">
+                            <Button 
+                              className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90 shadow-md transition-all duration-300 hover:shadow-lg group`}
+                            >
+                              {module.actionText}
+                              <span className="ml-1 transform transition-transform group-hover:translate-x-1">→</span>
                             </Button>
-                          </CollapsibleTrigger>
-                        </div>
-                        
-                        <CollapsibleContent>
-                          <div className="px-6 pb-6 pt-0">
-                            <p className="text-gray-600 mb-4">{module.description}</p>
-                            <Link to={module.url}>
-                              <Button className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90`}>
-                                {module.actionText}
-                              </Button>
-                            </Link>
-                          </div>
-                        </CollapsibleContent>
-                      </Collapsible>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="ai" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {modules
-                  .filter(module => module.aiPowered)
-                  .map((module, index) => (
-                    <Card key={index} className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern}`}>
-                      <CardContent className="p-0">
-                        <Collapsible>
-                          <div className="p-6">
+                          </Link>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="ai" className="mt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                    {modules
+                      .filter(module => module.aiPowered)
+                      .map((module, index) => (
+                        <Card 
+                          key={index} 
+                          className={`border-0 shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl pointer-events-auto transform translate-y-0 hover:-translate-y-2 ${module.bgPattern} opacity-0 animate-slide-up`}
+                          style={{ 
+                            animationDelay: `${index * 150}ms`,
+                            animationFillMode: 'forwards' 
+                          }}
+                        >
+                          <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
-                              <div className={`w-10 h-10 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center`}>
-                                <module.icon size={20} />
+                              <div className={`w-14 h-14 rounded-xl ${module.iconColor} bg-gray-50 flex items-center justify-center shadow-md`}>
+                                <module.icon size={28} className="animate-float" />
                               </div>
-                              <span className="flex items-center text-xs font-medium text-edubridge-purple bg-edubridge-purple/10 px-2 py-1 rounded-full">
-                                <Zap size={12} className="mr-1 animate-pulse-glow" />
+                              <span className="flex items-center text-sm font-medium text-edubridge-purple bg-edubridge-purple/10 px-3 py-1 rounded-full">
+                                <Zap size={14} className="mr-1 animate-pulse-glow" />
                                 Con IA
                               </span>
                             </div>
                             
-                            <h3 className="text-lg font-bold mb-2">{module.title}</h3>
+                            <h3 className="text-xl font-bold mb-2 transition-colors duration-300">{module.title}</h3>
+                            <p className="text-gray-600 mb-6 text-sm">{module.description}</p>
                             
-                            <CollapsibleTrigger asChild>
-                              <Button variant="ghost" size="sm" className="px-0 text-gray-500 hover:text-edubridge-blue">
-                                Ver detalles
+                            <Link to={module.url} className="block">
+                              <Button 
+                                className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90 shadow-md transition-all duration-300 hover:shadow-lg group`}
+                              >
+                                {module.actionText}
+                                <span className="ml-1 transform transition-transform group-hover:translate-x-1">→</span>
                               </Button>
-                            </CollapsibleTrigger>
-                          </div>
-                          
-                          <CollapsibleContent>
-                            <div className="px-6 pb-6 pt-0">
-                              <p className="text-gray-600 mb-4">{module.description}</p>
-                              <Link to={module.url}>
-                                <Button className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90`}>
-                                  {module.actionText}
-                                </Button>
-                              </Link>
-                            </div>
-                          </CollapsibleContent>
-                        </Collapsible>
-                      </CardContent>
-                    </Card>
-                ))}
-              </div>
-            </TabsContent>
-            
-            <TabsContent value="tools" className="mt-0">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {modules
-                  .filter(module => !module.aiPowered)
-                  .map((module, index) => (
-                    <Card key={index} className={`border-0 shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${module.bgPattern}`}>
-                      <CardContent className="p-0">
-                        <Collapsible>
-                          <div className="p-6">
+                            </Link>
+                          </CardContent>
+                        </Card>
+                      ))}
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="tools" className="mt-0">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+                    {modules
+                      .filter(module => !module.aiPowered)
+                      .map((module, index) => (
+                        <Card 
+                          key={index} 
+                          className={`border-0 shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl pointer-events-auto transform translate-y-0 hover:-translate-y-2 ${module.bgPattern} opacity-0 animate-slide-up`}
+                          style={{ 
+                            animationDelay: `${index * 150}ms`,
+                            animationFillMode: 'forwards' 
+                          }}
+                        >
+                          <CardContent className="p-6">
                             <div className="flex items-center justify-between mb-4">
-                              <div className={`w-10 h-10 rounded-lg ${module.iconColor} bg-gray-50 flex items-center justify-center`}>
-                                <module.icon size={20} />
+                              <div className={`w-14 h-14 rounded-xl ${module.iconColor} bg-gray-50 flex items-center justify-center shadow-md`}>
+                                <module.icon size={28} className="animate-float" />
                               </div>
                             </div>
                             
-                            <h3 className="text-lg font-bold mb-2">{module.title}</h3>
+                            <h3 className="text-xl font-bold mb-2 transition-colors duration-300">{module.title}</h3>
+                            <p className="text-gray-600 mb-6 text-sm">{module.description}</p>
                             
-                            <CollapsibleTrigger asChild>
-                              <Button variant="ghost" size="sm" className="px-0 text-gray-500 hover:text-edubridge-blue">
-                                Ver detalles
+                            <Link to={module.url} className="block">
+                              <Button 
+                                className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90 shadow-md transition-all duration-300 hover:shadow-lg group`}
+                              >
+                                {module.actionText}
+                                <span className="ml-1 transform transition-transform group-hover:translate-x-1">→</span>
                               </Button>
-                            </CollapsibleTrigger>
-                          </div>
-                          
-                          <CollapsibleContent>
-                            <div className="px-6 pb-6 pt-0">
-                              <p className="text-gray-600 mb-4">{module.description}</p>
-                              <Link to={module.url}>
-                                <Button className={`w-full bg-gradient-to-r ${module.color} text-white hover:opacity-90`}>
-                                  {module.actionText}
-                                </Button>
-                              </Link>
-                            </div>
-                          </CollapsibleContent>
-                        </Collapsible>
-                      </CardContent>
-                    </Card>
-                ))}
-              </div>
-            </TabsContent>
-          </Tabs>
+                            </Link>
+                          </CardContent>
+                        </Card>
+                      ))}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
         </div>
+        
+        {/* Spacer to account for the absolute positioned cards */}
+        <div className="h-[500px] md:h-[400px] lg:h-[350px]"></div>
       </div>
+      
+      {/* Add CSS animations */}
+      <style jsx>{`
+        @keyframes slide-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        @keyframes float {
+          0% {
+            transform: translateY(0px);
+          }
+          50% {
+            transform: translateY(-5px);
+          }
+          100% {
+            transform: translateY(0px);
+          }
+        }
+        
+        @keyframes pulse-glow {
+          0%, 100% {
+            opacity: 1;
+          }
+          50% {
+            opacity: 0.6;
+          }
+        }
+        
+        .animate-slide-up {
+          animation: slide-up 0.8s ease forwards;
+        }
+        
+        .animate-float {
+          animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-pulse-glow {
+          animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        .perspective-1000 {
+          perspective: 1000px;
+          transform: rotateX(2deg) rotateY(0deg);
+          transition: transform 0.3s ease;
+        }
+        
+        .perspective-1000:hover {
+          transform: rotateX(0deg) rotateY(0deg);
+        }
+      `}</style>
     </section>
   );
 };
