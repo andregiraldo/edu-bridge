@@ -1,12 +1,13 @@
 
 import React from 'react';
 import { User, Search, FileCheck, Home } from 'lucide-react';
+import { Card, CardContent } from "@/components/ui/card";
 
-const stepColors = [
-  'border-edubridge-blue text-edubridge-blue bg-edubridge-blue/5',
-  'border-edubridge-purple text-edubridge-purple bg-edubridge-purple/5',
-  'border-edubridge-cyan text-edubridge-cyan bg-edubridge-cyan/5',
-  'border-edubridge-coral text-edubridge-coral bg-edubridge-coral/5',
+const stepGradients = [
+  'from-edubridge-blue to-edubridge-purple',
+  'from-edubridge-purple to-edubridge-cyan',
+  'from-edubridge-cyan to-edubridge-coral',
+  'from-edubridge-coral to-edubridge-blue',
 ];
 
 const steps = [
@@ -43,28 +44,34 @@ const HowItWorksSection: React.FC = () => {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mt-12">
           {steps.map((step, index) => (
-            <div 
+            <Card 
               key={index} 
-              className="bg-white rounded-xl p-6 border border-gray-100 shadow-sm hover:shadow-md group transition-all duration-300"
-              style={{ animationDelay: `${index * 0.1}s` }}
+              className="border-0 shadow-lg hover:shadow-xl group transition-all duration-300 hover:-translate-y-1 overflow-hidden"
             >
-              <div className="flex flex-col items-center text-center">
-                <div className={`w-16 h-16 rounded-full ${stepColors[index % stepColors.length]} flex items-center justify-center mb-4 border-2 group-hover:scale-110 transition-transform duration-300`}>
-                  <step.icon size={28} />
-                </div>
-                <div className="relative mb-6">
-                  <h3 className="text-xl font-bold mb-2">{step.title}</h3>
+              {/* Top gradient border */}
+              <div className={`h-1 w-full bg-gradient-to-r ${stepGradients[index % stepGradients.length]}`}></div>
+              
+              <CardContent className="p-6">
+                <div className="flex flex-col items-center text-center">
+                  <div className={`w-16 h-16 rounded-full bg-gradient-to-br ${stepGradients[index % stepGradients.length]} p-0.5 mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                    <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
+                      <step.icon className={`text-edubridge-blue`} size={24} />
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-xl font-bold mb-3">{step.title}</h3>
+                  <p className="text-gray-600">{step.description}</p>
+                  
                   {index < steps.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 left-full w-full h-0.5 bg-gray-100 -translate-y-1/2">
-                      <div className="absolute right-0 -top-1.5 w-3 h-3 border-t-2 border-r-2 border-gray-100 rotate-45"></div>
+                    <div className="hidden lg:flex items-center justify-center mt-4">
+                      <div className="w-8 h-0.5 bg-gray-200"></div>
+                      <div className="w-2 h-2 rounded-full bg-gray-300 mx-1 group-hover:bg-edubridge-blue transition-colors duration-300"></div>
+                      <div className="w-8 h-0.5 bg-gray-200"></div>
                     </div>
                   )}
                 </div>
-                <p className="text-gray-600">{step.description}</p>
-                
-                <div className="w-2 h-2 rounded-full bg-gray-200 mt-6 group-hover:bg-edubridge-blue transition-colors duration-300"></div>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           ))}
         </div>
       </div>
