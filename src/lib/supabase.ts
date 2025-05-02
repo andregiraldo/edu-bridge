@@ -10,10 +10,11 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.error("Missing Supabase environment variables. Make sure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.")
 }
 
-// Create a single supabase client for the entire app
+// Create a single supabase client for the entire app with fallback values
+// These fallback values will prevent initial errors but won't connect to any real database
 export const supabase = createClient(
-  supabaseUrl || '', 
-  supabaseAnonKey || ''
+  supabaseUrl || 'https://placeholder-url.supabase.co', 
+  supabaseAnonKey || 'placeholder-key'
 )
 
 // Función auxiliar para verificar la conexión
