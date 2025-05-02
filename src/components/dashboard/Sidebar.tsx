@@ -1,62 +1,54 @@
 
 import React from 'react';
-import { Home, GraduationCap, House, DollarSign, FileText, Award, BarChart } from 'lucide-react';
-import { cn } from "@/lib/utils";
+import { 
+  GraduationCap, Home, Building, DollarSign, 
+  FileText, Award, PieChart, Compass
+} from 'lucide-react';
 
 interface SidebarProps {
   activeSection: string;
   setActiveSection: (section: string) => void;
 }
 
-const sidebarItems = [
-  { id: 'overview', label: 'Panel General', icon: Home },
-  { id: 'universities', label: 'Universidades', icon: GraduationCap },
-  { id: 'housing', label: 'Vivienda', icon: House },
-  { id: 'expenses', label: 'Gastos Estimados', icon: DollarSign },
-  { id: 'application', label: 'Guía de Aplicación', icon: FileText },
-  { id: 'scholarships', label: 'Becas', icon: Award },
-  { id: 'summary', label: 'Resumen Total', icon: BarChart },
-];
-
 const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) => {
+  const navItems = [
+    { id: 'overview', name: 'Panel Principal', icon: Home },
+    { id: 'universities', name: 'Universidades', icon: GraduationCap },
+    { id: 'housing', name: 'Alojamiento', icon: Building },
+    { id: 'expenses', name: 'Gastos', icon: DollarSign },
+    { id: 'filters', name: 'Filtros de Estudio', icon: Compass },
+    { id: 'application', name: 'Proceso de Solicitud', icon: FileText },
+    { id: 'scholarships', name: 'Becas', icon: Award },
+    { id: 'summary', name: 'Resumen Total', icon: PieChart },
+  ];
+
   return (
-    <div className="hidden md:flex flex-col w-64 bg-white border-r border-gray-200 shadow-sm">
-      <div className="p-4 border-b">
-        <h2 className="text-lg font-semibold text-gray-700">Mi Dashboard</h2>
+    <aside className="bg-white border-r w-64 hidden md:block p-4 overflow-y-auto">
+      <div className="mb-6">
+        <h2 className="text-xl font-bold text-edubridge-blue">EduBridge</h2>
+        <p className="text-sm text-gray-500">Dashboard de Estudiante</p>
       </div>
       
-      <div className="py-4 flex flex-col flex-1">
-        <nav className="px-2 space-y-1">
-          {sidebarItems.map(item => (
-            <button
-              key={item.id}
-              className={cn(
-                "flex items-center px-3 py-2 rounded-lg w-full text-left transition-colors",
-                activeSection === item.id
-                  ? "bg-edubridge-blue/10 text-edubridge-blue"
-                  : "text-gray-600 hover:bg-gray-100"
-              )}
-              onClick={() => setActiveSection(item.id)}
-            >
-              <item.icon className={cn(
-                "h-5 w-5 mr-3",
-                activeSection === item.id ? "text-edubridge-blue" : "text-gray-400"
-              )} />
-              {item.label}
-            </button>
+      <nav>
+        <ul className="space-y-1">
+          {navItems.map((item) => (
+            <li key={item.id}>
+              <button
+                className={`w-full flex items-center px-4 py-2 rounded-md text-sm ${
+                  activeSection === item.id
+                    ? 'bg-edubridge-blue text-white'
+                    : 'text-gray-700 hover:bg-gray-100'
+                }`}
+                onClick={() => setActiveSection(item.id)}
+              >
+                <item.icon className="h-5 w-5 mr-3" />
+                {item.name}
+              </button>
+            </li>
           ))}
-        </nav>
-      </div>
-      
-      <div className="p-4 border-t">
-        <div className="bg-gradient-to-r from-edubridge-blue/20 to-edubridge-purple/20 rounded-lg p-4 text-center">
-          <p className="text-sm font-medium text-gray-700 mb-2">¿Necesitas ayuda?</p>
-          <button className="text-edubridge-blue hover:text-edubridge-purple text-sm font-medium">
-            Contáctanos
-          </button>
-        </div>
-      </div>
-    </div>
+        </ul>
+      </nav>
+    </aside>
   );
 };
 

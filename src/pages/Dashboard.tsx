@@ -10,6 +10,7 @@ import ExpensesSection from '@/components/dashboard/ExpensesSection';
 import ApplicationGuideSection from '@/components/dashboard/ApplicationGuideSection';
 import ScholarshipsSection from '@/components/dashboard/ScholarshipsSection';
 import TotalSummarySection from '@/components/dashboard/TotalSummarySection';
+import StudyFiltersSection, { StudyFilters } from '@/components/dashboard/StudyFiltersSection';
 
 const Dashboard = () => {
   const [userAuth, setUserAuth] = useState<{ email: string; isAuthenticated: boolean } | null>(null);
@@ -20,6 +21,82 @@ const Dashboard = () => {
   const [selectedUniversity, setSelectedUniversity] = useState<any>(null);
   const [selectedHousing, setSelectedHousing] = useState<any>(null);
   const [expensesData, setExpensesData] = useState<any>({});
+  
+  // Nuevo estado para los filtros de estudio
+  const [studyFilters, setStudyFilters] = useState<StudyFilters>({
+    programType: 'undergraduate',
+    duration: '1year',
+    modality: 'onsite'
+  });
+
+  const updateStudyFilters = (newFilters: StudyFilters) => {
+    setStudyFilters(newFilters);
+    
+    // Ajustar costos basados en los filtros seleccionados
+    if (newFilters.modality === 'online') {
+      // Si es online, eliminamos gastos de vivienda
+      setSelectedHousing(null);
+      
+      // Actualizamos expensesData para reducir transporte y otros gastos
+      if (expensesData && Object.keys(expensesData).length > 0) {
+        setExpensesData({
+          ...expensesData,
+          transport: 0,
+          housing: 0,
+          monthly: expensesData.food + expensesData.entertainment + expensesData.other
+        });
+      }
+    }
+    
+    // Ajustar costos de matrícula basado en tipo y duración del programa
+    if (selectedUniversity && expensesData) {
+      let tuitionMultiplier = 1;
+      
+      // Ajuste por tipo de programa
+      switch (newFilters.programType) {
+        case 'language': 
+          tuitionMultiplier = 0.4; break;
+        case 'masters': 
+          tuitionMultiplier = 1.5; break;
+        case 'phd': 
+          tuitionMultiplier = 2; break;
+        case 'shortcourse': 
+          tuitionMultiplier = 0.3; break;
+        case 'specialization': 
+          tuitionMultiplier = 1.2; break;
+        case 'sabbatical': 
+          tuitionMultiplier = 0.8; break;
+        default: 
+          tuitionMultiplier = 1;
+      }
+      
+      // Ajuste por duración
+      let durationMultiplier = 1;
+      switch (newFilters.duration) {
+        case '3months': 
+          durationMultiplier = 0.25; break;
+        case '6months': 
+          durationMultiplier = 0.5; break;
+        case '2years': 
+          durationMultiplier = 2; break;
+        case '3plusyears': 
+          durationMultiplier = 3; break;
+        default: 
+          durationMultiplier = 1;
+      }
+      
+      if (expensesData.tuition) {
+        const baseTuition = expensesData.tuition / durationMultiplier / tuitionMultiplier;
+        const newTuition = baseTuition * tuitionMultiplier * durationMultiplier;
+        
+        setExpensesData({
+          ...expensesData,
+          tuition: newTuition,
+          total: newTuition + expensesData.housing + expensesData.food + expensesData.transport + expensesData.entertainment + expensesData.other
+        });
+      }
+    }
+  };
 
   useEffect(() => {
     // Check if user is authenticated
@@ -63,6 +140,10 @@ const Dashboard = () => {
                 expensesData={expensesData}
                 setExpensesData={setExpensesData}
               />
+              <StudyFiltersSection
+                filters={studyFilters}
+                updateFilters={updateStudyFilters}
+              />
               <ScholarshipsSection 
                 selectedUniversity={selectedUniversity}
               />
@@ -99,6 +180,14 @@ const Dashboard = () => {
               selectedHousing={selectedHousing}
               expensesData={expensesData}
               setExpensesData={setExpensesData}
+              fullWidth
+            />
+          )}
+          
+          {activeSection === 'filters' && (
+            <StudyFiltersSection
+              filters={studyFilters}
+              updateFilters={updateStudyFilters}
               fullWidth
             />
           )}
