@@ -14,7 +14,7 @@ export type Database = {
           apellido: string | null
           created_at: string
           email: string | null
-          id: number
+          id: string
           nombre: string | null
           updated_at: string | null
         }
@@ -22,7 +22,7 @@ export type Database = {
           apellido?: string | null
           created_at?: string
           email?: string | null
-          id?: number
+          id: string
           nombre?: string | null
           updated_at?: string | null
         }
@@ -30,7 +30,7 @@ export type Database = {
           apellido?: string | null
           created_at?: string
           email?: string | null
-          id?: number
+          id?: string
           nombre?: string | null
           updated_at?: string | null
         }
