@@ -3,14 +3,16 @@ import { useState, useEffect, createContext, useContext, ReactNode } from 'react
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
+import { User } from '@supabase/supabase-js';
 
-type User = {
+// Modified User type to handle optional email safely
+type SafeUser = {
   id: string;
   email: string;
 } | null;
 
 interface AuthContextType {
-  user: User;
+  user: SafeUser;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -18,7 +20,7 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User>(null);
+  const [user, setUser] = useState<SafeUser>(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -27,7 +29,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const checkSession = async () => {
       try {
         const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user ?? null);
+        // Safely handle user data with optional email
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email || 'No email provided'
+          });
+        } else {
+          setUser(null);
+        }
         setLoading(false);
       } catch (error) {
         console.error('Error checking session:', error);
@@ -40,15 +50,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
-        setUser(session?.user ?? null);
-        
-        if (event === 'SIGNED_IN' && session) {
-          localStorage.setItem('auth', JSON.stringify({ 
-            email: session.user.email, 
-            isAuthenticated: true 
-          }));
-        } else if (event === 'SIGNED_OUT') {
-          localStorage.removeItem('auth');
+        // Safely handle user data with optional email
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email || 'No email provided'
+          });
+          
+          if (event === 'SIGNED_IN') {
+            localStorage.setItem('auth', JSON.stringify({ 
+              email: session.user.email, 
+              isAuthenticated: true 
+            }));
+          }
+        } else {
+          setUser(null);
+          
+          if (event === 'SIGNED_OUT') {
+            localStorage.removeItem('auth');
+          }
         }
       }
     );
