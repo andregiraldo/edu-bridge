@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -64,6 +65,19 @@ const Register = () => {
     try {
       console.log('Intentando registrar usuario con email:', email);
       
+      // Comprobamos si el usuario ya existe antes de intentar registrarlo
+      const { data: existingUsers } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('email', email)
+        .maybeSingle();
+      
+      if (existingUsers) {
+        toast.error('Este correo electrónico ya está registrado');
+        setLoading(false);
+        return;
+      }
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -74,7 +88,12 @@ const Register = () => {
       
       if (error) {
         console.error('Error durante el registro:', error);
-        toast.error(error.message);
+        
+        if (error.message.includes('already registered')) {
+          toast.error('Este correo electrónico ya está registrado');
+        } else {
+          toast.error(error.message || 'Error al registrarse');
+        }
       } else {
         console.log('Usuario registrado correctamente:', data);
         
@@ -100,7 +119,10 @@ const Register = () => {
           }
         }
         
+        // Mensaje informativo sobre la verificación del correo
         toast.success('¡Registro exitoso! Por favor verifica tu correo electrónico.');
+        
+        // Navegar a la página de verificación de correo electrónico
         navigate('/verify-email', { state: { email } });
       }
     } catch (error) {
