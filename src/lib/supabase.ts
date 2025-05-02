@@ -12,6 +12,28 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 // Create a single supabase client for the entire app
 export const supabase = createClient(
-  supabaseUrl || 'https://placeholder-url.supabase.co', 
-  supabaseAnonKey || 'placeholder-key'
+  supabaseUrl || '', 
+  supabaseAnonKey || ''
 )
+
+// Función auxiliar para verificar la conexión
+export const checkSupabaseConnection = async () => {
+  try {
+    // Intentamos hacer una consulta simple para verificar la conexión
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('id')
+      .limit(1);
+    
+    if (error) {
+      console.error('Error de conexión con Supabase:', error);
+      return false;
+    }
+    
+    console.log('Conexión con Supabase establecida correctamente');
+    return true;
+  } catch (err) {
+    console.error('Error al verificar la conexión con Supabase:', err);
+    return false;
+  }
+}

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Globe, Eye, EyeOff } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { supabase, checkSupabaseConnection } from '@/lib/supabase';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -15,10 +15,29 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [supabaseConnected, setSupabaseConnected] = useState(true);
   const navigate = useNavigate();
+
+  // Verificar la conexión con Supabase al cargar el componente
+  useEffect(() => {
+    const verifyConnection = async () => {
+      const isConnected = await checkSupabaseConnection();
+      setSupabaseConnected(isConnected);
+      if (!isConnected) {
+        toast.error('No se pudo conectar con la base de datos. Por favor, intenta más tarde.');
+      }
+    };
+
+    verifyConnection();
+  }, []);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!supabaseConnected) {
+      toast.error('No hay conexión con la base de datos. Por favor, intenta más tarde.');
+      return;
+    }
     
     if (password !== confirmPassword) {
       toast.error('Las contraseñas no coinciden');
@@ -46,6 +65,8 @@ const Register = () => {
       } else {
         // Después de registrar al usuario, crear un perfil en la tabla profiles
         if (data.user) {
+          console.log('Creando perfil para el usuario:', data.user.id);
+          
           const { error: profileError } = await supabase
             .from('profiles')
             .insert([
@@ -58,7 +79,9 @@ const Register = () => {
             
           if (profileError) {
             console.error('Error creando el perfil:', profileError);
-            // No mostrar error al usuario ya que el registro fue exitoso
+            toast.error('Se creó el usuario pero hubo un problema al guardar el perfil');
+          } else {
+            console.log('Perfil creado exitosamente');
           }
         }
         
