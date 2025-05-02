@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Bell, Menu, Globe, LogOut, User } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -10,6 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/useAuth';
 
 interface NavbarProps {
   userEmail: string;
@@ -17,12 +18,7 @@ interface NavbarProps {
 
 const Navbar: React.FC<NavbarProps> = ({ userEmail }) => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const navigate = useNavigate();
-  
-  const handleLogout = () => {
-    localStorage.removeItem('auth');
-    navigate('/login');
-  };
+  const { signOut } = useAuth();
   
   return (
     <nav className="bg-white shadow-sm z-10">
@@ -30,10 +26,10 @@ const Navbar: React.FC<NavbarProps> = ({ userEmail }) => {
         <div className="flex justify-between items-center py-3 px-4">
           {/* Logo */}
           <div className="flex items-center">
-            <a href="/" className="text-edubridge-blue text-2xl font-bold flex items-center">
+            <Link to="/" className="text-edubridge-blue text-2xl font-bold flex items-center">
               <Globe className="w-6 h-6 mr-2" />
               Edu<span className="text-edubridge-purple">Bridge</span>
-            </a>
+            </Link>
           </div>
           
           {/* Mobile menu button */}
@@ -73,7 +69,7 @@ const Navbar: React.FC<NavbarProps> = ({ userEmail }) => {
                   <span>Mi perfil</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
+                <DropdownMenuItem onClick={signOut}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Cerrar sesión</span>
                 </DropdownMenuItem>
@@ -90,7 +86,7 @@ const Navbar: React.FC<NavbarProps> = ({ userEmail }) => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleLogout}
+                onClick={signOut}
                 className="text-red-500"
               >
                 <LogOut className="h-4 w-4 mr-1" />

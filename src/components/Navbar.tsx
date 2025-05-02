@@ -1,5 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Menu, X, Globe, Zap } from 'lucide-react';
 
@@ -26,13 +27,13 @@ const Navbar: React.FC = () => {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'}`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <div className="flex items-center">
-          <span className="text-edubridge-blue text-2xl font-bold flex items-center">
+          <Link to="/" className="text-edubridge-blue text-2xl font-bold flex items-center">
             <Globe className="w-6 h-6 mr-2" />
             Edu<span className="text-edubridge-purple">Bridge</span>
             <span className="ml-2 text-xs px-2 py-1 rounded-full bg-edubridge-blue/10 text-edubridge-blue flex items-center">
               <Zap className="w-3 h-3 mr-1" /> AI
             </span>
-          </span>
+          </Link>
         </div>
 
         {/* Desktop menu */}
@@ -58,12 +59,16 @@ const Navbar: React.FC = () => {
 
         {/* CTA button (desktop) */}
         <div className="hidden md:flex space-x-4 items-center">
-          <Button variant="ghost" className="text-gray-700 hover:text-edubridge-blue hover:bg-edubridge-blue/5">
-            Iniciar sesión
-          </Button>
-          <Button className="bg-gradient-to-r from-edubridge-blue to-edubridge-purple hover:from-edubridge-purple hover:to-edubridge-blue text-white transition-all duration-300">
-            Registrarse
-          </Button>
+          <Link to="/login">
+            <Button variant="ghost" className="text-gray-700 hover:text-edubridge-blue hover:bg-edubridge-blue/5">
+              Iniciar sesión
+            </Button>
+          </Link>
+          <Link to="/register">
+            <Button className="bg-gradient-to-r from-edubridge-blue to-edubridge-purple hover:from-edubridge-purple hover:to-edubridge-blue text-white transition-all duration-300">
+              Registrarse
+            </Button>
+          </Link>
         </div>
       </div>
 
@@ -77,12 +82,16 @@ const Navbar: React.FC = () => {
             <li><a href="#contacto" className="block py-2 text-gray-700 hover:text-edubridge-blue transition-colors" onClick={toggleMenu}>Contacto</a></li>
           </ul>
           <div className="mt-4 flex space-x-2">
-            <Button variant="ghost" className="w-1/2 justify-center">
-              Iniciar sesión
-            </Button>
-            <Button className="w-1/2 justify-center bg-gradient-to-r from-edubridge-blue to-edubridge-purple">
-              Registrarse
-            </Button>
+            <Link to="/login" className="w-1/2">
+              <Button variant="ghost" className="w-full justify-center">
+                Iniciar sesión
+              </Button>
+            </Link>
+            <Link to="/register" className="w-1/2">
+              <Button className="w-full justify-center bg-gradient-to-r from-edubridge-blue to-edubridge-purple">
+                Registrarse
+              </Button>
+            </Link>
           </div>
         </div>
       )}
