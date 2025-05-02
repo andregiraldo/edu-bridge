@@ -44,6 +44,24 @@ const Register = () => {
       if (error) {
         toast.error(error.message);
       } else {
+        // Después de registrar al usuario, crear un perfil en la tabla profiles
+        if (data.user) {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert([
+              { 
+                id: data.user.id, 
+                email: email,
+                created_at: new Date()
+              }
+            ]);
+            
+          if (profileError) {
+            console.error('Error creando el perfil:', profileError);
+            // No mostrar error al usuario ya que el registro fue exitoso
+          }
+        }
+        
         toast.success('¡Registro exitoso! Por favor verifica tu correo electrónico.');
         navigate('/verify-email', { state: { email } });
       }
