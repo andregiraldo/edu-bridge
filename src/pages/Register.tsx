@@ -6,8 +6,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { Globe, Eye, EyeOff } from 'lucide-react';
+import { Globe, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import { supabase, checkSupabaseConnection } from '@/lib/supabase';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -16,15 +17,25 @@ const Register = () => {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [supabaseConnected, setSupabaseConnected] = useState(true);
+  const [connectionChecked, setConnectionChecked] = useState(false);
   const navigate = useNavigate();
 
   // Verificar la conexión con Supabase al cargar el componente
   useEffect(() => {
     const verifyConnection = async () => {
-      const isConnected = await checkSupabaseConnection();
-      setSupabaseConnected(isConnected);
-      if (!isConnected) {
-        toast.error('No se pudo conectar con la base de datos. Por favor, intenta más tarde.');
+      try {
+        const isConnected = await checkSupabaseConnection();
+        console.log('Estado de la conexión a Supabase:', isConnected);
+        setSupabaseConnected(isConnected);
+        if (!isConnected) {
+          toast.error('No se pudo conectar con la base de datos. Por favor, intenta más tarde.');
+        }
+        setConnectionChecked(true);
+      } catch (error) {
+        console.error('Error al verificar la conexión:', error);
+        setSupabaseConnected(false);
+        toast.error('Error al verificar la conexión con la base de datos.');
+        setConnectionChecked(true);
       }
     };
 
@@ -52,6 +63,8 @@ const Register = () => {
     setLoading(true);
     
     try {
+      console.log('Intentando registrar usuario con email:', email);
+      
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
@@ -61,8 +74,11 @@ const Register = () => {
       });
       
       if (error) {
+        console.error('Error durante el registro:', error);
         toast.error(error.message);
       } else {
+        console.log('Usuario registrado correctamente:', data);
+        
         // Después de registrar al usuario, crear un perfil en la tabla profiles
         if (data.user) {
           console.log('Creando perfil para el usuario:', data.user.id);
@@ -89,8 +105,8 @@ const Register = () => {
         navigate('/verify-email', { state: { email } });
       }
     } catch (error) {
+      console.error('Error inesperado durante el registro:', error);
       toast.error('Error al registrarse');
-      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -122,6 +138,16 @@ const Register = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
+            {connectionChecked && !supabaseConnected && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertCircle className="h-4 w-4" />
+                <AlertTitle>Error de conexión</AlertTitle>
+                <AlertDescription>
+                  No se pudo establecer conexión con la base de datos. Por favor, intenta más tarde.
+                </AlertDescription>
+              </Alert>
+            )}
+            
             <form onSubmit={handleRegister} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Correo electrónico</Label>
@@ -168,7 +194,7 @@ const Register = () => {
               <Button 
                 type="submit" 
                 className="w-full bg-gradient-to-r from-edubridge-blue to-edubridge-purple hover:from-edubridge-purple hover:to-edubridge-blue"
-                disabled={loading}
+                disabled={loading || !supabaseConnected}
               >
                 {loading ? 'Registrando...' : 'Crear cuenta'}
               </Button>

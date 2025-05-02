@@ -1,21 +1,12 @@
 
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from '@supabase/supabase-js';
 
-// Get Supabase URL and anon key from runtime environment
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+// Usar directamente las credenciales de Supabase
+const SUPABASE_URL = "https://yqhqpmlrzgscsqrbohds.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlxaHFwbWxyemdzY3NxcmJvaGRzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDYxNDY5NDcsImV4cCI6MjA2MTcyMjk0N30.rOS9Ntiqi3rirYteNdp0Xx5vVhCgfbHWQpI-_c_Cplc";
 
-// Make sure we have the required environment variables
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.error("Missing Supabase environment variables. Make sure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.")
-}
-
-// Create a single supabase client for the entire app with fallback values
-// These fallback values will prevent initial errors but won't connect to any real database
-export const supabase = createClient(
-  supabaseUrl || 'https://placeholder-url.supabase.co', 
-  supabaseAnonKey || 'placeholder-key'
-)
+// Crear cliente de Supabase
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // Función auxiliar para verificar la conexión
 export const checkSupabaseConnection = async () => {
@@ -37,4 +28,4 @@ export const checkSupabaseConnection = async () => {
     console.error('Error al verificar la conexión con Supabase:', err);
     return false;
   }
-}
+};
