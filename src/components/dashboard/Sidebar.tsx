@@ -2,7 +2,7 @@
 import React from 'react';
 import { 
   GraduationCap, Home, Building, DollarSign, 
-  FileText, Award, PieChart, Compass
+  FileText, Award, PieChart, Compass, Search
 } from 'lucide-react';
 
 interface SidebarProps {
@@ -27,6 +27,15 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, setActiveSection }) =>
       <div className="mb-6">
         <h2 className="text-xl font-bold text-edubridge-blue">EduBridge</h2>
         <p className="text-sm text-gray-500">Dashboard de Estudiante</p>
+      </div>
+      
+      <div className="flex items-center px-3 py-2 mb-4 rounded-lg bg-gray-50">
+        <Search className="h-4 w-4 text-gray-400 mr-2" />
+        <input 
+          type="text"
+          placeholder="Buscar..." 
+          className="bg-transparent border-none focus:outline-none text-sm w-full text-gray-700"
+        />
       </div>
       
       <nav>
