@@ -60,8 +60,29 @@ const UniversitySection: React.FC<UniversitySectionProps> = ({
           throw new Error('Error al obtener universidades');
         }
         
-        const data = await response.json();
-        console.log("Respuesta del webhook dashboard:", data);
+        // Primero intentamos parsear la respuesta como texto para inspeccionar su contenido
+        const responseText = await response.text();
+        let data;
+        
+        try {
+          // Intentamos convertir el texto a un objeto JSON
+          data = responseText ? JSON.parse(responseText) : null;
+          console.log("Respuesta del webhook dashboard:", data);
+        } catch (error) {
+          console.error("Error al parsear JSON:", error);
+          throw new Error('Formato de respuesta inválido');
+        }
+        
+        // Verificar si la respuesta está vacía
+        if (!data) {
+          const filteredLocal = universidades.filter(uni => uni.pais === selectedCountry);
+          setUniversitiesList(filteredLocal);
+          toast({
+            title: "Respuesta vacía",
+            description: "El servicio no devolvió datos. Mostrando resultados locales.",
+          });
+          return;
+        }
         
         // Verifica si la respuesta es el mensaje "Workflow was started"
         if (data && data.message === "Workflow was started") {
@@ -75,39 +96,51 @@ const UniversitySection: React.FC<UniversitySectionProps> = ({
           return;
         }
         
-        // Si recibimos una respuesta en formato array, usarla
+        // Manejar diferentes formatos de respuesta
+        let universityData = [];
+        
+        // Si es un array, usarlo directamente
         if (Array.isArray(data)) {
-          // Transformar la respuesta para que coincida con nuestro formato de datos
-          const formattedData = data.map((uni: any, index: number) => ({
-            id: universidades.length + index + 1,
+          universityData = data;
+        }
+        // Si es un objeto único (no un array), convertirlo en array
+        else if (data && typeof data === 'object' && data.nombre) {
+          universityData = [data];
+        }
+        // Si tiene algún formato diferente pero con datos que podríamos intentar usar
+        else if (data && typeof data === 'object') {
+          // Intentar extraer información útil del objeto
+          toast({
+            title: "Formato de respuesta inesperado",
+            description: "La estructura de datos no coincide con lo esperado. Mostrando resultados locales.",
+          });
+          const filteredLocal = universidades.filter(uni => uni.pais === selectedCountry);
+          setUniversitiesList(filteredLocal);
+          return;
+        }
+        
+        if (universityData.length > 0) {
+          // Asegurarse de que todos los objetos tienen la estructura correcta
+          const formattedData = universityData.map((uni: any, index: number) => ({
+            id: uni.id || universidades.length + index + 1,
             nombre: uni.nombre || 'Universidad sin nombre',
-            imagen: `https://images.unsplash.com/photo-${1490000000000 + index}`,
+            imagen: uni.imagen || `https://images.unsplash.com/photo-${1490000000000 + index}`,
             pais: uni.pais || selectedCountry,
             ciudad: uni.ciudad || 'Ciudad no especificada',
-            programas: Math.floor(Math.random() * 50) + 10, // Número aleatorio de programas
+            programas: uni.programas || Math.floor(Math.random() * 50) + 10, // Número aleatorio de programas
           }));
           
-          if (formattedData.length > 0) {
-            setUniversitiesList(formattedData);
-            toast({
-              title: `Universidades de ${selectedCountry}`,
-              description: `Se encontraron ${formattedData.length} universidades`,
-            });
-          } else {
-            // Si no hay resultados, usar datos locales filtrados
-            const filteredLocal = universidades.filter(uni => uni.pais === selectedCountry);
-            setUniversitiesList(filteredLocal);
-            toast({
-              description: "No se encontraron universidades externas. Mostrando resultados locales.",
-            });
-          }
+          setUniversitiesList(formattedData);
+          toast({
+            title: `Universidades de ${selectedCountry}`,
+            description: `Se encontraron ${formattedData.length} universidades`,
+          });
         } else {
-          // Si la respuesta no es un array, usar datos locales
+          // Si no hay resultados, usar datos locales filtrados
           const filteredLocal = universidades.filter(uni => uni.pais === selectedCountry);
           setUniversitiesList(filteredLocal);
           toast({
-            title: "Formato de respuesta inesperado",
-            description: "Mostrando universidades de nuestro directorio local",
+            description: "No se encontraron universidades externas. Mostrando resultados locales.",
           });
         }
       } catch (error) {
