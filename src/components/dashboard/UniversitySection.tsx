@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -54,6 +53,7 @@ const UniversitySection: React.FC<UniversitySectionProps> = ({
         // Construir URL con parámetro de país
         const url = `${webhookUrl}?pais=${encodeURIComponent(selectedCountry)}`;
         
+        console.log("Llamando al webhook desde dashboard:", url);
         const response = await fetch(url);
         
         if (!response.ok) {
@@ -61,29 +61,53 @@ const UniversitySection: React.FC<UniversitySectionProps> = ({
         }
         
         const data = await response.json();
+        console.log("Respuesta del webhook dashboard:", data);
         
-        // Transformar la respuesta para que coincida con nuestro formato de datos
-        const formattedData = data.map((uni: any, index: number) => ({
-          id: universidades.length + index + 1,
-          nombre: uni.nombre || 'Universidad sin nombre',
-          imagen: `https://images.unsplash.com/photo-${1490000000000 + index}`,
-          pais: uni.pais || selectedCountry,
-          ciudad: uni.ciudad || 'Ciudad no especificada',
-          programas: Math.floor(Math.random() * 50) + 10, // Número aleatorio de programas
-        }));
-        
-        if (formattedData.length > 0) {
-          setUniversitiesList(formattedData);
-          toast({
-            title: `Universidades de ${selectedCountry}`,
-            description: `Se encontraron ${formattedData.length} universidades`,
-          });
-        } else {
-          // Si no hay resultados, usar datos locales filtrados
+        // Verifica si la respuesta es el mensaje "Workflow was started"
+        if (data && data.message === "Workflow was started") {
+          // Usar datos locales filtrados como fallback
           const filteredLocal = universidades.filter(uni => uni.pais === selectedCountry);
           setUniversitiesList(filteredLocal);
           toast({
-            description: "No se encontraron universidades externas. Mostrando resultados locales.",
+            title: "Proceso iniciado",
+            description: "El workflow se ha iniciado. Mostrando resultados locales mientras se procesa.",
+          });
+          return;
+        }
+        
+        // Si recibimos una respuesta en formato array, usarla
+        if (Array.isArray(data)) {
+          // Transformar la respuesta para que coincida con nuestro formato de datos
+          const formattedData = data.map((uni: any, index: number) => ({
+            id: universidades.length + index + 1,
+            nombre: uni.nombre || 'Universidad sin nombre',
+            imagen: `https://images.unsplash.com/photo-${1490000000000 + index}`,
+            pais: uni.pais || selectedCountry,
+            ciudad: uni.ciudad || 'Ciudad no especificada',
+            programas: Math.floor(Math.random() * 50) + 10, // Número aleatorio de programas
+          }));
+          
+          if (formattedData.length > 0) {
+            setUniversitiesList(formattedData);
+            toast({
+              title: `Universidades de ${selectedCountry}`,
+              description: `Se encontraron ${formattedData.length} universidades`,
+            });
+          } else {
+            // Si no hay resultados, usar datos locales filtrados
+            const filteredLocal = universidades.filter(uni => uni.pais === selectedCountry);
+            setUniversitiesList(filteredLocal);
+            toast({
+              description: "No se encontraron universidades externas. Mostrando resultados locales.",
+            });
+          }
+        } else {
+          // Si la respuesta no es un array, usar datos locales
+          const filteredLocal = universidades.filter(uni => uni.pais === selectedCountry);
+          setUniversitiesList(filteredLocal);
+          toast({
+            title: "Formato de respuesta inesperado",
+            description: "Mostrando universidades de nuestro directorio local",
           });
         }
       } catch (error) {
